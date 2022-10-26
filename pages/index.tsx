@@ -5,6 +5,7 @@ import { useStore } from "../components/StoreProvider";
 import styles from "../styles/Home.module.css";
 import { observer } from "mobx-react";
 import { PostsI } from "../store/PostsStore";
+import onestyle from "../components/Index/style.module.scss";
 
 const HomePage = observer(function Home({
   initialState: { data },
@@ -18,7 +19,7 @@ const HomePage = observer(function Home({
   } = useStore();
 
   return (
-    <div className={styles.container}>
+    <div className={onestyle.body}>
       <Head>
         <title>Главная</title>
         <meta name="description" content="Главная" />
@@ -26,12 +27,7 @@ const HomePage = observer(function Home({
       </Head>
       <input
         type="text"
-        value={data?.title}
-        onChange={(e) => changeVal(e?.target?.value)}
-      />
-      <input
-        type="text"
-        value={body?.title}
+        value={val || data?.title}
         onChange={(e) => changeVal(e?.target?.value)}
       />
       <main className={styles.main}>
