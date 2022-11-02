@@ -14,7 +14,7 @@ export function useStore() {
   return context;
 }
 
-function initializeStore(initialData = null) {
+export default function initializeStore(initialData = null) {
   const _store = store ?? new RootStore();
 
   // If your page has Next.js data fetching methods that use a Mobx store, it will

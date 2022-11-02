@@ -15,7 +15,11 @@
     "jsx": "preserve",
     "incremental": true,
     "experimentalDecorators": true,
-    "useDefineForClassFields": true
+    "useDefineForClassFields": true,
+    "baseUrl": ".",
+    // "paths": {
+    //   "@/styles/*": ["styles/*"]
+    // },
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]
