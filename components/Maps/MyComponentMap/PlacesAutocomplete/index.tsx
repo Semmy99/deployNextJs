@@ -101,9 +101,9 @@ const PlacesAutocomplete = () => {
     }
     // Get latitude and longitude via utility functions
     getGeocode({ address: data.suggestion.description }).then((results) => {
-      const { lat, lng } = getLatLng(results[0]);
+      const latLng = getLatLng(results[0]);
       setCoords((prev) => {
-        return { ...(prev || {}), [inputName]: { lat, lng } };
+        return { ...(prev || {}), [inputName]: latLng };
       });
     });
   };
