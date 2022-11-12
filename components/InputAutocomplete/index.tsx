@@ -5,7 +5,7 @@ import parse from "autosuggest-highlight/parse";
 import styles from "styles/InputAutocomplete.module.scss";
 import { getSuggestionValue } from "./helpers";
 import { ClearSuggestions } from "use-places-autocomplete";
-import { InputNames } from "components/Maps/MyComponentMap/PlacesAutocomplete";
+import { InputNames } from "components/Maps/CustomMap/PlacesAutocomplete";
 
 // Use your imagination to render suggestions.
 function renderSuggestion(
@@ -64,7 +64,7 @@ const InputAutocomplete: React.FC<InputAutocompleteI> = ({
     value: string;
     reason: string;
   }) => {
-    console.log("onSuggestionsFetchRequested", reason);
+    // console.log("onSuggestionsFetchRequested", reason);
   };
 
   return (

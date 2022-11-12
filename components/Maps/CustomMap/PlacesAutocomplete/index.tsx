@@ -9,6 +9,8 @@ import React from "react";
 import InputAutocomplete from "components/InputAutocomplete";
 import Button from "components/Button";
 import { useStore } from "components/StoreProvider";
+import useCalculateDistance from "hooks/useCalculateDistance";
+import { TravelMode, UnitSystem } from "pages";
 
 export enum InputNames {
   FIRST_POINT = "firstPoint",
@@ -26,7 +28,11 @@ export type CoordsI = {
   };
 };
 
-const PlacesAutocomplete = () => {
+const PlacesAutocomplete = ({
+  travelMode,
+}: {
+  travelMode: google.maps.TravelMode;
+}) => {
   const {
     ready: firstPointReady,
     value: firstPointVal,
@@ -45,6 +51,14 @@ const PlacesAutocomplete = () => {
   } = usePlacesAutocomplete({
     debounce: 300,
   });
+  const res = useCalculateDistance({
+    origin: firstPointVal,
+    destination: secondPointVal,
+    // travelMode: google.maps.TravelMode.DRIVING,
+    travelMode: TravelMode[travelMode],
+    unitSystem: UnitSystem.IMPERIAL,
+  });
+  console.log("res", res);
 
   const {
     MainPageStore: { setCoordsToStore },
@@ -144,15 +158,18 @@ const PlacesAutocomplete = () => {
       </OutsideClickHandler>
       <h2>firstPoint</h2>
       <p>
-        <b>lat - </b>
-        {coords?.firstPoint?.lat || ""} <b>lng</b>{" "}
+        <b>lat:</b>
+        {coords?.firstPoint?.lat || ""} <b>lng</b>:
         {coords?.firstPoint?.lng || ""}
       </p>
       <h2>secondPoint</h2>
       <p>
-        <b>lat - </b> {coords?.secondPoint?.lat || ""} <b>lng</b>{" "}
+        <b>lat:</b> {coords?.secondPoint?.lat || ""} <b>lng</b>:
         {coords?.secondPoint?.lng || ""}
       </p>
+      <h3>km {res?.km}</h3>
+      <h3>mile {res?.mile}</h3>
+      <h3>Time {res?.txt}</h3>
       <Button
         title="Сохранить координаты  в стор"
         onClick={() => {

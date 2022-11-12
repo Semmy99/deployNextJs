@@ -6,7 +6,7 @@
   "extends": [
     "next/core-web-vitals",
     "plugin:@typescript-eslint/recommended",
-    "prettier" // Add "prettier" last. This will turn off eslint rules conflicting with prettier. This is not what will format our code.
+    "prettier"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -26,6 +26,10 @@
       "prettier/prettier": ["error", {
           "endOfLine":"auto"
        }],
-      "react/react-in-jsx-scope": "off"
+    //   // we want to force semicolons
+    //   "semi": ["error", "always"],
+    //   // we want to avoid extraneous spaces
+    //   "no-multi-spaces": ["error"],
+      "@typescript-eslint/no-var-requires": "off"
   }
 }
