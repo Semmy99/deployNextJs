@@ -1,4 +1,3 @@
-/*global google*/
 import React from "react";
 import { LatLng } from "use-places-autocomplete";
 // let google: any = {};
@@ -9,19 +8,18 @@ function callbackDefault(
   status: google.maps.DistanceMatrixStatus,
   setData: React.Dispatch<React.SetStateAction<dataI>>,
 ) {
-  console.log("response", response);
+  console.log("callback", response);
 
   if (status != google.maps.DistanceMatrixStatus.OK) {
-    console.log("callbackDefault oops");
   } else {
     const origin = response?.originAddresses[0];
     const destination = response?.destinationAddresses[0];
     if (response?.rows[0].elements[0].status === "ZERO_RESULTS") {
       console.log("Better get on a plane. There are no roads between ");
+      return;
     } else {
       const distance = response?.rows[0].elements[0].distance;
       const duration = response?.rows[0].elements[0].duration;
-      // console.log(response?.rows[0].elements[0].distance);
       if (distance?.value && distance?.value) {
         setData({
           km: distance.value / 1000,
@@ -29,10 +27,6 @@ function callbackDefault(
           txt: duration?.text,
           val: duration?.value,
         });
-        // const distance_in_kilo = distance?.value / 1000; // the kilom
-        // const distance_in_mile = distance.value / 1609.34; // the mile
-        // const duration_text = duration?.text;
-        // const duration_value = duration?.value;
       }
     }
   }
@@ -58,6 +52,7 @@ interface useCalculateDistanceI {
   unitSystem: google.maps.UnitSystem; // miles and feet.
   avoidHighways?: boolean;
   avoidTolls?: boolean;
+  transitOpt?: google.maps.TransitOptions;
 }
 
 interface dataI {
@@ -86,14 +81,17 @@ function useCalculateDistance({
   unitSystem,
   avoidHighways = false,
   avoidTolls = false,
+  transitOpt,
 }: useCalculateDistanceI) {
   const [data, setData] = React.useState<dataI>();
-  console.log("useCalculateDistance", travelMode);
+  // console.log("useCalculateDistance", travelMode);
 
   const service = React.useMemo(() => {
     if (typeof window === "undefined") return null;
     // console.log("google", new google.maps.DistanceMatrixService());
-    return google.maps && new google.maps.DistanceMatrixService();
+
+    new google.maps.DirectionsRenderer({});
+    return new google.maps.DistanceMatrixService();
   }, []);
   // console.log("service", service);
 
@@ -108,6 +106,7 @@ function useCalculateDistance({
           travelMode,
           unitSystem, // miles and feet.
           // unitSystem: google.maps.UnitSystem.metric, // kilometers and meters.
+          transitOptions: transitOpt,
           avoidHighways,
           avoidTolls,
         },

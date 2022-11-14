@@ -23,6 +23,29 @@ export enum TravelMode {
   TWO_WHEELER = "TWO_WHEELER",
   WALKING = "WALKING",
 }
+
+export enum TransitMode {
+  /**
+   * Specifies bus as a preferred mode of transit.
+   */
+  BUS = "BUS",
+  /**
+   * Specifies rail as a preferred mode of transit.
+   */
+  RAIL = "RAIL",
+  /**
+   * Specifies subway as a preferred mode of transit.
+   */
+  SUBWAY = "SUBWAY",
+  /**
+   * Specifies train as a preferred mode of transit.
+   */
+  TRAIN = "TRAIN",
+  /**
+   * Specifies tram as a preferred mode of transit.
+   */
+  TRAM = "TRAM",
+}
 const options = [
   {
     value: TravelMode.TRANSIT,
@@ -47,25 +70,21 @@ export interface SelectedI {
   label: string;
 }
 
-function handleCoords(
+async function handleCoords(
   map: google.maps.Map,
   maps: typeof google.maps,
   coords: CoordsI,
   selectedOption: google.maps.TravelMode,
+  directionDisplay: google.maps.DirectionsRenderer,
+  directionService: google.maps.DirectionsService,
 ) {
-  // TODO: ошибка
-  // console.log("map", map);
-  // console.log("maps", maps);
-  // console.log("coords", toJS(coords));
-  // console.log("selectedOption", selectedOption);
-  // TODO: Пример Указания маршрута
-  // Нужн найти дистанцию. и время
-  if (maps && typeof maps.DirectionsRenderer === "function") {
-    // clean previous directions rendered to the map;
-    const directionDisplay = new maps.DirectionsRenderer({});
-    const directionService = new maps.DirectionsService();
-    directionService.route(
-      {
+  try {
+    // Нужн найти дистанцию. и время
+    if (maps && typeof maps.DirectionsRenderer === "function") {
+      // clean previous directions rendered to the map;
+      // const directionDisplay = new maps.DirectionsRenderer({});
+      // const directionService = new maps.DirectionsService();
+      const directionsResult = await directionService.route({
         origin: {
           lat: coords.firstPoint?.lat as number,
           lng: coords.firstPoint?.lng as number,
@@ -75,33 +94,30 @@ function handleCoords(
           lng: coords.secondPoint?.lng as number,
         },
         travelMode: selectedOption,
-      },
-      function (response, status) {
-        // console.log("response, status", response, status);
-        if (status === "OK") {
-          directionDisplay.setDirections(response);
-        } else {
-          toast.error("AAAAAAAAAAAAAAAAA ОШИБКА");
-        }
-      },
-    );
-    directionDisplay.setOptions({});
-    directionDisplay.setMap(map);
+      });
+      directionDisplay.setDirections(directionsResult);
+      toast.success("Маршрут отрисован");
+
+      console.log("directionsResult", directionsResult);
+
+      // directionDisplay.setOptions({});
+      directionDisplay.setMap(map);
+    }
+    // const routePolyline =
+    //   new google.maps.Polyline(/* options: google.maps.PolylineOptions */);
+    // routePolyline.setMap(map);
+  } catch (error) {
+    console.log("error", error);
+    toast.error("AAAAAAAAAAAAAAAAA ОШИБКА");
   }
-  const routePolyline =
-    new google.maps.Polyline(/* options: google.maps.PolylineOptions */);
-  routePolyline.setMap(map);
 }
 
 const HomePage = observer(function Home({
   initialState: { data },
-  body,
 }: {
   initialState: { data: PostsI };
-  body: PostsI;
 }) {
   const {
-    SomeStore: { val, changeVal },
     MainPageStore: { coords },
   } = useStore();
   const notify = () => toast("Wow so easy!");
@@ -113,13 +129,25 @@ const HomePage = observer(function Home({
   const [load, setLoad] = React.useState(false);
   const [map, setMap] = React.useState<google.maps.Map | null>(null);
   const [maps, setMaps] = React.useState<typeof google.maps | null>(null);
-
+  const [directionsRenderer, setDirectionsRenderer] =
+    React.useState<google.maps.DirectionsRenderer | null>(null);
+  const [directionsService, setDirectionsService] =
+    React.useState<google.maps.DirectionsService | null>(null);
   React.useEffect(() => {
     selectedOption &&
       map &&
       maps &&
       coords &&
-      handleCoords(map, maps, coords, selectedOption.value);
+      directionsRenderer &&
+      directionsService &&
+      handleCoords(
+        map,
+        maps,
+        coords,
+        selectedOption.value,
+        directionsRenderer,
+        directionsService,
+      );
   }, [coords, map, maps, selectedOption]);
 
   React.useEffect(() => {
@@ -140,7 +168,7 @@ const HomePage = observer(function Home({
       {load && (
         <Select
           defaultValue={selectedOption}
-          onChange={(a, b) => setSelectedOption(a as SelectedI)}
+          onChange={(a) => setSelectedOption(a as SelectedI)}
           options={options}
           id="1"
         />
@@ -151,6 +179,8 @@ const HomePage = observer(function Home({
           setMaps={(map, maps) => {
             setMap(map);
             setMaps(maps);
+            setDirectionsRenderer(new maps.DirectionsRenderer({}));
+            setDirectionsService(new maps.DirectionsService());
           }}
           coords={coords}
         />

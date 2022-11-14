@@ -10,7 +10,7 @@ import InputAutocomplete from "components/InputAutocomplete";
 import Button from "components/Button";
 import { useStore } from "components/StoreProvider";
 import useCalculateDistance from "hooks/useCalculateDistance";
-import { TravelMode, UnitSystem } from "pages";
+import { TransitMode, TravelMode, UnitSystem } from "pages";
 
 export enum InputNames {
   FIRST_POINT = "firstPoint",
@@ -51,14 +51,16 @@ const PlacesAutocomplete = ({
   } = usePlacesAutocomplete({
     debounce: 300,
   });
-  const res = useCalculateDistance({
+  const distance = useCalculateDistance({
     origin: firstPointVal,
     destination: secondPointVal,
     // travelMode: google.maps.TravelMode.DRIVING,
     travelMode: TravelMode[travelMode],
     unitSystem: UnitSystem.IMPERIAL,
+    transitOpt: {
+      modes: [TransitMode.BUS],
+    },
   });
-  console.log("res", res);
 
   const {
     MainPageStore: { setCoordsToStore },
@@ -167,9 +169,9 @@ const PlacesAutocomplete = ({
         <b>lat:</b> {coords?.secondPoint?.lat || ""} <b>lng</b>:
         {coords?.secondPoint?.lng || ""}
       </p>
-      <h3>km {res?.km}</h3>
-      <h3>mile {res?.mile}</h3>
-      <h3>Time {res?.txt}</h3>
+      <h3>km {distance?.km}</h3>
+      <h3>mile {distance?.mile}</h3>
+      <h3>Time {distance?.txt}</h3>
       <Button
         title="Сохранить координаты  в стор"
         onClick={() => {
