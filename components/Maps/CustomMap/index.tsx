@@ -19,7 +19,7 @@ const defaultProps = {
 
 export interface CustomMapI {
   setMaps: (map: google.maps.Map | null, maps: typeof google.maps) => void;
-  coords: CoordsI;
+  coords: CoordsI | null;
 }
 
 function CustomMap({ setMaps, coords }: CustomMapI) {

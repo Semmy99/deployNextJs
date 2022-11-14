@@ -1,5 +1,5 @@
-import { CoordsI } from "components/Maps/MyComponentMap/PlacesAutocomplete";
-import { action, makeObservable, observable, runInAction } from "mobx";
+import { CoordsI } from "components/Maps/CustomMap/PlacesAutocomplete";
+import { action, makeObservable, observable } from "mobx";
 export const MAIN_PAGE_STORE = "MainPageStore";
 export default class MainPageStore {
   @observable
