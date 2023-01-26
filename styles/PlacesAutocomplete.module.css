@@ -1,0 +1,21 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn {
+  width: 240px;
+  height: 30px;
+  margin-left: 10px;
+}
+
+.autocomplete {
+  /* margin-right: 10px; */
+}
+
+.refreshIcon {
+  margin: 0 10px;
+  cursor: pointer;
+  /* background: url("/public/refreshing.svg"); */
+}

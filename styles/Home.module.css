@@ -2,14 +2,24 @@
   padding: 0 2rem;
 }
 
+.headerBlock {
+  position: relative;
+  /* height: 800px; */
+  width: 800px;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+}
+
 .main {
-  min-height: 100vh;
+  /* min-height: 100vh; */
   padding: 4rem 0;
   flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  position: relative;
 }
 
 .footer {
@@ -65,12 +75,15 @@
     Bitstream Vera Sans Mono, Courier New, monospace;
 }
 
-.grid {
+.headerBackgroundContainer {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  max-width: 800px;
+  position: absolute;
+  width: 100%;
+  height: 600px;
+  top: 0;
 }
 
 .card {
@@ -109,13 +122,13 @@
 }
 
 @media (max-width: 600px) {
-  .grid {
+  .headerBackgroundContainer {
     width: 100%;
     flex-direction: column;
   }
 }
 
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
   .card,
   .footer {
     border-color: #222;
@@ -126,4 +139,4 @@
   .logo img {
     filter: invert(1);
   }
-}
+} */

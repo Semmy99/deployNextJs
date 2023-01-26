@@ -17,6 +17,7 @@
     "experimentalDecorators": true,
     "useDefineForClassFields": true,
     "baseUrl": ".",
+    "plugins": [{ "name": "typescript-plugin-css-modules" }]
     // "paths": {
     //   "@/styles/*": ["styles/*"]
     // },
