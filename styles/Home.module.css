@@ -1,11 +1,17 @@
 .container {
-  padding: 0 2rem;
+  padding: 100px 20px ;
+  width: 1920px;
+  max-width: 100%;
+  margin: 0 auto;
+  /* background-color: rgb(109, 206, 235); */
+  position: relative;
 }
 
 .headerBlock {
-  position: relative;
-  /* height: 800px; */
-  width: 800px;
+  /* position: relative; */
+  /* height:600px; */
+  /* width: 800px; */
+  max-width: 100%;
   justify-content: center;
   align-items: center;
   margin: 0 auto;
@@ -19,10 +25,10 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  position: relative;
+  /* position: relative; */
 }
 
-.footer {
+/* .footer {
   display: flex;
   flex: 1;
   padding: 2rem 0;
@@ -36,9 +42,9 @@
   justify-content: center;
   align-items: center;
   flex-grow: 1;
-}
+} */
 
-.title a {
+/* .title a {
   color: #0070f3;
   text-decoration: none;
 }
@@ -73,7 +79,7 @@
   font-size: 1.1rem;
   font-family: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono,
     Bitstream Vera Sans Mono, Courier New, monospace;
-}
+} */
 
 .headerBackgroundContainer {
   display: flex;
@@ -82,11 +88,17 @@
   flex-wrap: wrap;
   position: absolute;
   width: 100%;
-  height: 600px;
+  height: 50%;
   top: 0;
+  left: 0;
+  z-index: -1;
 }
-
-.card {
+.headerBackgroundContainer img {
+  width: 100%;
+  height: 100%;
+  max-width: 100% !important;
+}
+/* .card {
   margin: 1rem;
   padding: 1.5rem;
   text-align: left;
@@ -119,6 +131,15 @@
 .logo {
   height: 1em;
   margin-left: 0.5rem;
+} */
+
+.mainHeader {
+  font-family: 'Montserrat';
+  color: #FFF;
+  font-weight: 700;
+  font-size: 64px;
+  line-height: 130%;
+  margin:  0 0 50px 0 ;
 }
 
 @media (max-width: 600px) {
@@ -140,3 +161,4 @@
     filter: invert(1);
   }
 } */
+

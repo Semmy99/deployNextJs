@@ -2,20 +2,14 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
+  background: rgba(255, 255, 255, 0.5);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  /* backdrop-filter: blur(5px); */
+  /* Note: backdrop-filter has minimal browser support */
+  border-radius: 10px;
+  height: 200px;
+  /* transform: rotate(90deg); */
 }
 
-.btn {
-  width: 240px;
-  height: 30px;
-  margin-left: 10px;
-}
 
-.autocomplete {
-  /* margin-right: 10px; */
-}
-
-.refreshIcon {
-  margin: 0 10px;
-  cursor: pointer;
-  /* background: url("/public/refreshing.svg"); */
-}

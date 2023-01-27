@@ -1,0 +1,38 @@
+.formField > div {
+  width: 520px;
+}
+.formField {
+  display: flex;
+  justify-content: center;
+  align-items: center;    
+  width: 100%;
+  padding: 0 10px;
+}
+
+.autocomplete {
+  /* margin-right: 10px; */
+}
+
+.btn {
+  width: 240px;
+  height: 30px;
+  margin-left: 10px;
+  height: 41px;
+  background-color: #fff;
+  border: none;
+  border-radius: 5px;
+}
+
+
+
+.refreshIcon {
+  margin: 0 10px;
+  cursor: pointer;
+  border-radius: 4px;
+  background: #fff;
+  padding: 10px 13px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+

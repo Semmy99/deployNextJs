@@ -1,0 +1,26 @@
+.radioLabel {
+  margin-right: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.radioContainer {
+  margin-bottom: 20px;
+  font-size: 18px;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.radioContainer input {
+  width: 18px;
+  height: 18px;
+  margin-left: 5px;
+}
+
+.radioContainer > .radioLabel:last-child {
+  margin-right: 0;
+}
