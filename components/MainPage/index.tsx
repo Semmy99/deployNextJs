@@ -52,7 +52,7 @@ const MainPage = observer(function Home({
           // blurDataURL="/"
         />
       </div>
-      <div className={styles.container}>
+      <div className={`${styles.container} ${styles.containerHeight}`}>
         {/* <button onClick={notify}>Notify!</button> */}
         <Head>
           <title>Главная </title>
@@ -72,22 +72,20 @@ const MainPage = observer(function Home({
         <h1 className={styles.mainHeader}>How to get to</h1>
 
         <div className={styles.headerBlock}>
-          <div>
-            <PlacesAutocomplete
-              r1={r1}
-              r2={r2}
-              map={map}
-              maps={maps}
-              coords={coords}
-              setCoordsToStore={setCoordsToStore}
-              swapCoordsPlaces={swapCoordsPlaces}
-              directionsRenderer={directionsRenderer}
-              directionsService={directionsService}
-            />
-          </div>
+          <PlacesAutocomplete
+            r1={r1}
+            r2={r2}
+            map={map}
+            maps={maps}
+            coords={coords}
+            setCoordsToStore={setCoordsToStore}
+            swapCoordsPlaces={swapCoordsPlaces}
+            directionsRenderer={directionsRenderer}
+            directionsService={directionsService}
+          />
         </div>
       </div>
-      {/* <CustomMap
+      <CustomMap
         setMaps={(map, maps) => {
           setMap(map);
           setMaps(maps);
@@ -95,7 +93,7 @@ const MainPage = observer(function Home({
           setDirectionsService(new maps.DirectionsService());
         }}
         coords={coords}
-      /> */}
+      />
       <div className={styles.main}>
         <div id="sidebar"></div>
       </div>

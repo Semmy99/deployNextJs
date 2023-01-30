@@ -6,6 +6,9 @@
   /* background-color: rgb(109, 206, 235); */
   position: relative;
 }
+.containerHeight {
+  height: 500px;
+}
 
 .headerBlock {
   /* position: relative; */

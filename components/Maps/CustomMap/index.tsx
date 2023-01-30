@@ -1,8 +1,6 @@
 import { GetServerSideProps } from "next";
 import React from "react";
 import GoogleMapReact from "google-map-react";
-import { useStore } from "components/StoreProvider";
-import useCalculateDistance from "hooks/useCalculateDistance";
 import { CoordsI } from "components/PlacesAutocomplete/types";
 import styles from "styles/CustomMap.module.css";
 const AnyReactComponent = ({ text }: any) => (

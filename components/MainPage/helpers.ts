@@ -18,7 +18,7 @@ export const options = [
   },
 ];
 
-export async function handleCoords(
+export async function handlerDrawingRoutes(
   map: google.maps.Map,
   maps: typeof google.maps,
   coords: CoordsI,
@@ -44,6 +44,8 @@ export async function handleCoords(
         },
         travelMode: selectedOption,
       });
+      console.log("directionsResult", directionsResult);
+
       directionsRenderer.setDirections(directionsResult);
       // console.log("AAAA", document.getElementById("sidebar"));
       directionsRenderer.setPanel(

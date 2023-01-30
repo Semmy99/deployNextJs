@@ -3,7 +3,7 @@ import { TravelMode } from "components/MainPage/types";
 import styles from "styles/PlacesAutocomplete.module.css";
 import { observer } from "mobx-react";
 import { CoordsI } from "./types";
-import { handleCoords } from "components/MainPage/helpers";
+import { handlerDrawingRoutes } from "components/MainPage/helpers";
 import RadioGroupTravelMode from "./RadioGroupTravelMode";
 import SearchClusterBlock from "./SearchClusterBlock";
 
@@ -63,12 +63,12 @@ const PlacesAutocomplete = ({
           maps={maps}
           directionsRenderer={directionsRenderer}
           directionsService={directionsService}
-          handleCoords={handleCoords}
+          handlerDrawingRoutes={handlerDrawingRoutes}
           r1={r1}
           r2={r2}
         />
       </div>
-      <h2>firstPoint</h2>
+      {/* <h2>firstPoint</h2>
       <p>
         <b>lat:</b>
         {coords?.firstPoint?.lat || ""} <b>lng</b>:
@@ -78,7 +78,7 @@ const PlacesAutocomplete = ({
       <p>
         <b>lat:</b> {coords?.secondPoint?.lat || ""} <b>lng</b>:
         {coords?.secondPoint?.lng || ""}
-      </p>
+      </p> */}
       {/* <h3>km {distance?.km}</h3>
       <h3>mile {distance?.mile}</h3>
       <h3>Time {distance?.txt}</h3> */}

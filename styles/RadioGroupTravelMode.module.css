@@ -24,3 +24,12 @@
 .radioContainer > .radioLabel:last-child {
   margin-right: 0;
 }
+
+@media (max-width: 480px) {
+  .radioLabel {
+    margin-right: 4px;
+  }
+  .radioContainer {
+    font-size: 14px;
+  }
+}

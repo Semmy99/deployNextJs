@@ -21,7 +21,7 @@ type SearchClusterBlockType = {
   maps: typeof google.maps | null;
   directionsRenderer: google.maps.DirectionsRenderer | null;
   directionsService: google.maps.DirectionsService | null;
-  handleCoords(
+  handlerDrawingRoutes(
     map: google.maps.Map,
     maps: typeof google.maps,
     coords: CoordsI,
@@ -42,7 +42,7 @@ function SearchClusterBlock({
   maps,
   directionsRenderer,
   directionsService,
-  handleCoords,
+  handlerDrawingRoutes,
   r1,
   r2,
 }: SearchClusterBlockType) {
@@ -199,7 +199,7 @@ function SearchClusterBlock({
         </div>
       </OutsideClickHandler>
       <Button
-        title="Сохранить координаты  в стор"
+        title="Построить маршрут"
         onClick={() => {
           console.log("CLICK");
 
@@ -213,7 +213,7 @@ function SearchClusterBlock({
             coords &&
             directionsRenderer &&
             directionsService &&
-            handleCoords(
+            handlerDrawingRoutes(
               map,
               maps,
               coords,

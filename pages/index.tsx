@@ -71,7 +71,7 @@ const HomePage = () => <MainPage />;
 //   label: string;
 // }
 
-// async function handleCoords(
+// async function handlerDrawingRoutes(
 //   map: google.maps.Map,
 //   maps: typeof google.maps,
 //   coords: CoordsI,
@@ -148,7 +148,7 @@ const HomePage = () => <MainPage />;
 //       coords &&
 //       directionsRenderer &&
 //       directionsService &&
-//       handleCoords(
+//       handlerDrawingRoutes(
 //         map,
 //         maps,
 //         coords,
