@@ -1,14 +1,14 @@
 export enum InputNames {
-  FIRST_POINT = "firstPoint",
-  SECOND_POINT = "secondPoint",
+  FROM = "from",
+  TO = "to",
 }
 
 export type CoordsI = {
-  firstPoint?: {
+  [InputNames.FROM]?: {
     lat: number;
     lng: number;
   };
-  secondPoint?: {
+  [InputNames.TO]?: {
     lat: number;
     lng: number;
   };

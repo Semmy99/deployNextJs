@@ -16,19 +16,10 @@ a {
   margin: 0;
   padding: 0;
 }
+
 ul {
   list-style: none;
 }
-
-/* @media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
-  body {
-    color: black;
-  }
-} */
-
 
 /**
  * @license
@@ -46,5 +37,33 @@ ul {
 #google-map {
   width: 100%;
   height: 100vh;
-  background-color: red;
+}
+
+
+.sidebar {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+
+.sidebar .adp-list img,
+.adp-substep img {
+  width: 30px !important;
+  height: 30px !important;
+}
+
+.sidebar .adp-step,
+.adp-substep {
+  padding: .8em 3px .8em 3px;
+}
+
+.adp-placemark {
+  background: #113050 !important;
+  color: #fff !important;
+}
+
+.adp,
+.adp table,
+.adp button {
+  width: 100%;
 }

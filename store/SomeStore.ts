@@ -2,7 +2,7 @@ import { action, makeObservable, observable, runInAction } from "mobx";
 
 export default class SomeStore {
   @observable
-  val: string = "";
+  val = "";
   constructor() {
     makeObservable(this);
   }

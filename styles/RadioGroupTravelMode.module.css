@@ -21,7 +21,7 @@
   margin-left: 5px;
 }
 
-.radioContainer > .radioLabel:last-child {
+.radioContainer>.radioLabel:last-child {
   margin-right: 0;
 }
 
@@ -29,6 +29,7 @@
   .radioLabel {
     margin-right: 4px;
   }
+
   .radioContainer {
     font-size: 14px;
   }

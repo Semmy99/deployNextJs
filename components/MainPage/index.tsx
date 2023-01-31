@@ -8,7 +8,7 @@ import PlacesAutocomplete from "components/PlacesAutocomplete";
 import CustomMap from "components/Maps/CustomMap";
 import React from "react";
 import { toJS } from "mobx";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const MainPage = observer(function Home({
@@ -19,7 +19,13 @@ const MainPage = observer(function Home({
   r2?: string;
 }) {
   const {
-    MainPageStore: { coords, setCoordsToStore, swapCoordsPlaces },
+    MainPageStore: {
+      coords,
+      setCoordsToStore,
+      swapCoordsPlaces,
+      saveDistance,
+      distance,
+    },
   } = useStore();
 
   const [load, setLoad] = React.useState(false);
@@ -36,8 +42,9 @@ const MainPage = observer(function Home({
 
   return (
     <>
-      {" "}
-      <div className={styles.headerBackgroundContainer}>
+      <div
+        className={`${styles.headerBackgroundContainer} ${styles.containerHeight}`}
+      >
         <Image
           src="/mainBG2.jpg"
           fill
@@ -66,9 +73,10 @@ const MainPage = observer(function Home({
           directionsRenderer?.setMap(null);
           setCoordsToStore(null);
         }}
-      >
+        >
         CLEAR
       </button> */}
+
         <h1 className={styles.mainHeader}>How to get to</h1>
 
         <div className={styles.headerBlock}>
@@ -77,12 +85,37 @@ const MainPage = observer(function Home({
             r2={r2}
             map={map}
             maps={maps}
-            coords={coords}
+            saveDistance={saveDistance}
             setCoordsToStore={setCoordsToStore}
             swapCoordsPlaces={swapCoordsPlaces}
-            directionsRenderer={directionsRenderer}
             directionsService={directionsService}
+            directionsRenderer={directionsRenderer}
           />
+        </div>
+      </div>
+      <div className={`${styles.container} ${styles.routeInfoBlock}`}>
+        <h2 className={`${styles.subHeader}`}>Информация о маршруте</h2>
+        <div className={`${styles.distanceFieldContainer}`}>
+          <div className={`${styles.distanceFieldBlock}`}>
+            <p className={`${styles.distanceFieldHeader}`}>Расстояние в км</p>
+            <p className={`${styles.distanceVal}`}>
+              {" "}
+              {Math.floor(distance?.km || 0) || "-"}{" "}
+            </p>
+          </div>
+          <div className={`${styles.distanceFieldBlock}`}>
+            <p className={`${styles.distanceFieldHeader}`}>
+              Расстояние в милях
+            </p>
+            <p className={`${styles.distanceVal}`}>
+              {" "}
+              {Math.floor(distance?.mile || 0) || "-"}{" "}
+            </p>
+          </div>
+          <div className={`${styles.distanceFieldBlock}`}>
+            <p className={`${styles.distanceFieldHeader}`}>Время</p>
+            <p className={`${styles.distanceVal}`}> {distance?.txt || "-"} </p>
+          </div>
         </div>
       </div>
       <CustomMap
@@ -94,8 +127,11 @@ const MainPage = observer(function Home({
         }}
         coords={coords}
       />
+
       <div className={styles.main}>
-        <div id="sidebar"></div>
+        <div id="sidebar" className={` ${styles.container} ${styles.sidebar}`}>
+          <h2 className={`${styles.subHeader}`}>Описание маршрута</h2>
+        </div>
       </div>
     </>
   );

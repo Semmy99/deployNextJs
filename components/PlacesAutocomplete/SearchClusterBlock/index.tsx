@@ -9,33 +9,13 @@ import usePlacesAutocomplete, {
 } from "use-places-autocomplete";
 import Autosuggest from "react-autosuggest";
 import Image from "next/image";
-import { TravelMode } from "components/MainPage/types";
+import { TravelMode, UnitSystem } from "components/MainPage/types";
 import React from "react";
-
-type SearchClusterBlockType = {
-  swapCoordsPlaces: () => void;
-  coords: CoordsI | null;
-  setCoordsToStore: (coords: CoordsI | null) => void;
-  radioTravelMode: TravelMode;
-  map: google.maps.Map | null;
-  maps: typeof google.maps | null;
-  directionsRenderer: google.maps.DirectionsRenderer | null;
-  directionsService: google.maps.DirectionsService | null;
-  handlerDrawingRoutes(
-    map: google.maps.Map,
-    maps: typeof google.maps,
-    coords: CoordsI,
-    selectedOption: google.maps.TravelMode,
-    directionsRenderer: google.maps.DirectionsRenderer,
-    directionService: google.maps.DirectionsService,
-  ): Promise<void>;
-  r1?: string;
-  r2?: string;
-};
+import useCalculateDistance from "hooks/useCalculateDistance";
+import { SearchClusterBlockType } from "./types";
 
 function SearchClusterBlock({
   swapCoordsPlaces,
-  coords,
   setCoordsToStore,
   radioTravelMode,
   map,
@@ -45,6 +25,7 @@ function SearchClusterBlock({
   handlerDrawingRoutes,
   r1,
   r2,
+  saveDistance,
 }: SearchClusterBlockType) {
   const {
     ready: firstPointReady,
@@ -71,17 +52,16 @@ function SearchClusterBlock({
     async function updateCoordsByQueryParams() {
       const newCoords: CoordsI = {};
       if (r1) {
-        handleInput(r1, "type", InputNames.FIRST_POINT);
+        handleInput(r1, "type", InputNames.FROM);
         const results = await getGeocode({ address: r1 });
         const latLng = getLatLng(results[0]);
-        newCoords[InputNames.FIRST_POINT] = latLng;
+        newCoords[InputNames.FROM] = latLng;
       }
       if (r2) {
-        handleInput(r2, "type", InputNames.SECOND_POINT);
+        handleInput(r2, "type", InputNames.TO);
         const results = await getGeocode({ address: r2 });
-        console.log("results", results);
         const latLng = getLatLng(results[0]);
-        newCoords[InputNames.SECOND_POINT] = latLng;
+        newCoords[InputNames.TO] = latLng;
       }
       setCoordsToStore(newCoords);
     }
@@ -96,29 +76,22 @@ function SearchClusterBlock({
     // Если кликнули по выпадающему списку
     // устанавливать значение в апи places, очищать список
     if (method === "click") {
-      if (inputName === InputNames.FIRST_POINT) {
+      if (inputName === InputNames.FROM) {
         firstPointSetVal(txt, false);
         firstPointClearSuggestions();
       }
-      if (inputName === InputNames.SECOND_POINT) {
+      if (inputName === InputNames.TO) {
         secondPointSetVal(txt, false);
         secondPointClearSuggestions();
       }
       return;
     }
     // В противном случае обновляем значение и стягиваем через апи новые значения
-    if (inputName === InputNames.FIRST_POINT) {
+    if (inputName === InputNames.FROM) {
       firstPointSetVal(txt);
     }
-    if (inputName === InputNames.SECOND_POINT) {
+    if (inputName === InputNames.TO) {
       secondPointSetVal(txt);
-    }
-    // Чистим координаты если значение удалено
-    if (!txt) {
-      setCoordsToStore({ ...coords, [inputName]: null });
-      // setCoords((prev) => {
-      //   return { ...(prev || {}), [inputName]: null };
-      // });
     }
   };
 
@@ -129,83 +102,100 @@ function SearchClusterBlock({
   ) => {
     // When user selects a place, we can replace the keyword without request data from API
     // by setting the second parameter to "false"
-    if (inputName === InputNames.FIRST_POINT) {
+    if (inputName === InputNames.FROM) {
       firstPointSetVal(data.suggestion.description, false);
       firstPointClearSuggestions();
     }
-    if (inputName === InputNames.SECOND_POINT) {
+    if (inputName === InputNames.TO) {
       secondPointSetVal(data.suggestion.description, false);
       secondPointClearSuggestions();
     }
-    // Get latitude and longitude via utility functions
-    getGeocode({ address: data.suggestion.description }).then((results) => {
-      const latLng = getLatLng(results[0]);
-      setCoordsToStore({ ...coords, [inputName]: latLng });
-    });
   };
+
+  async function handlerGeoCoding(from: string, to: string) {
+    const fromRes = await getGeocode({ address: from });
+    const latLngFrom = getLatLng(fromRes[0]);
+    const toRes = await getGeocode({ address: to });
+    const latLngTo = getLatLng(toRes[0]);
+    const coords = {
+      [InputNames.FROM]: latLngFrom,
+      [InputNames.TO]: latLngTo,
+    };
+    setCoordsToStore(coords);
+    return coords;
+  }
+
+  useCalculateDistance({
+    origin: firstPointVal,
+    destination: secondPointVal,
+    travelMode: TravelMode[radioTravelMode],
+    unitSystem: UnitSystem.IMPERIAL,
+    handlerSaveData: saveDistance,
+  });
 
   return (
     <div className={styles.formField}>
-      <OutsideClickHandler
-        onOutsideClick={() => {
-          // When user clicks outside of the component, we can dismiss
-          // the searched suggestions by calling this method
-          firstPointClearSuggestions();
-        }}
-      >
-        <div className={styles.autocomplete}>
-          <InputAutocomplete
-            handleInput={handleInput}
-            value={firstPointVal}
-            suggestions={firstPointData}
-            handleSelect={handleSelect}
-            clearSuggestions={firstPointClearSuggestions}
-            disabled={!firstPointReady}
-            inputName={InputNames.FIRST_POINT}
-            placeholder="Откуда"
+      <div className={styles.formFieldContainer}>
+        <OutsideClickHandler
+          onOutsideClick={() => {
+            // When user clicks outside of the component, we can dismiss
+            // the searched suggestions by calling this method
+            firstPointClearSuggestions();
+          }}
+        >
+          <div>
+            <InputAutocomplete
+              handleInput={handleInput}
+              value={firstPointVal}
+              suggestions={firstPointData}
+              handleSelect={handleSelect}
+              clearSuggestions={firstPointClearSuggestions}
+              disabled={!firstPointReady}
+              inputName={InputNames.FROM}
+              placeholder="Откуда"
+            />
+          </div>
+        </OutsideClickHandler>
+        <span
+          className={styles.refreshIcon}
+          onClick={() => {
+            swapCoordsPlaces();
+            firstPointSetVal(secondPointVal);
+            secondPointSetVal(firstPointVal);
+          }}
+        >
+          <Image
+            src="/refreshing.svg"
+            alt="Поменять значения местами"
+            quality="100"
+            placeholder="empty"
+            width={20}
+            height={20}
+            // blurDataURL="/"
           />
-        </div>
-      </OutsideClickHandler>
-      <span
-        className={styles.refreshIcon}
-        onClick={() => {
-          swapCoordsPlaces();
-          firstPointSetVal(secondPointVal);
-          secondPointSetVal(firstPointVal);
-        }}
-      >
-        <Image
-          src="/refreshing.svg"
-          alt="Поменять значения местами"
-          quality="100"
-          placeholder="empty"
-          width={20}
-          height={20}
-          // blurDataURL="/"
-        />
-      </span>
-      <OutsideClickHandler onOutsideClick={secondPointClearSuggestions}>
-        <div className={styles.autocomplete}>
-          <InputAutocomplete
-            handleInput={handleInput}
-            value={secondPointVal}
-            suggestions={secondPointData}
-            handleSelect={handleSelect}
-            clearSuggestions={secondPointClearSuggestions}
-            disabled={!secondPointReady}
-            inputName={InputNames.SECOND_POINT}
-            placeholder="Куда"
-          />
-        </div>
-      </OutsideClickHandler>
+        </span>
+        <OutsideClickHandler onOutsideClick={secondPointClearSuggestions}>
+          <div>
+            <InputAutocomplete
+              handleInput={handleInput}
+              value={secondPointVal}
+              suggestions={secondPointData}
+              handleSelect={handleSelect}
+              clearSuggestions={secondPointClearSuggestions}
+              disabled={!secondPointReady}
+              inputName={InputNames.TO}
+              placeholder="Куда"
+            />
+          </div>
+        </OutsideClickHandler>
+      </div>
       <Button
         title="Построить маршрут"
-        onClick={() => {
-          console.log("CLICK");
-
-          coords?.[InputNames.FIRST_POINT] &&
-            coords?.[InputNames.SECOND_POINT] &&
-            setCoordsToStore(coords);
+        onClick={async () => {
+          const coords = await handlerGeoCoding(firstPointVal, secondPointVal);
+          // coords?.[InputNames.FROM] &&
+          //   coords?.[InputNames.TO] &&
+          //   setCoordsToStore(coords);
 
           radioTravelMode &&
             map &&
@@ -222,10 +212,8 @@ function SearchClusterBlock({
               directionsService,
             );
         }}
-        disabled={
-          !coords?.[InputNames.FIRST_POINT] ||
-          !coords?.[InputNames.SECOND_POINT]
-        }
+        disabled={!firstPointVal || !secondPointVal}
+        // disabled={!coords?.[InputNames.FROM] || !coords?.[InputNames.TO]}
         className={styles.btn}
       />
     </div>

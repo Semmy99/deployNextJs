@@ -18,17 +18,3 @@ export default class RootStore {
     console.log("");
   }
 }
-
-// export default class RootStore {
-//   // [NOTIFICATIONS_STORE]: NotificationsStore;
-
-//   constructor() {
-//     // this[NOTIFICATIONS_STORE] = new NotificationsStore(this);
-//   }
-// }
-
-// export const store = new RootStore();
-
-// export const StoreContext = createContext(store);
-
-// export const useNotificationsStore = () => useStore().notificationsStore;

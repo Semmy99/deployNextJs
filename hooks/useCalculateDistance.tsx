@@ -6,10 +6,9 @@ import { LatLng } from "use-places-autocomplete";
 function callbackDefault(
   response: google.maps.DistanceMatrixResponse | null,
   status: google.maps.DistanceMatrixStatus,
-  setData: React.Dispatch<React.SetStateAction<dataI>>,
+  setData: React.Dispatch<React.SetStateAction<distanceDataI>>,
+  handlerSaveData?: (data: distanceDataI) => void,
 ) {
-  console.log("callback", response);
-
   if (status != google.maps.DistanceMatrixStatus.OK) {
   } else {
     const origin = response?.originAddresses[0];
@@ -21,12 +20,14 @@ function callbackDefault(
       const distance = response?.rows[0].elements[0].distance;
       const duration = response?.rows[0].elements[0].duration;
       if (distance?.value && distance?.value) {
-        setData({
+        const resData = {
           km: distance.value / 1000,
           mile: distance.value / 1609.34,
           txt: duration?.text,
           val: duration?.value,
-        });
+        };
+        setData(resData);
+        handlerSaveData && handlerSaveData(resData);
       }
     }
   }
@@ -47,31 +48,22 @@ interface useCalculateDistanceI {
     a: google.maps.DistanceMatrixResponse | null,
     b: google.maps.DistanceMatrixStatus,
     c: any,
+    handlerSaveData?: (data: distanceDataI) => void,
   ) => void;
   travelMode?: google.maps.TravelMode;
   unitSystem: google.maps.UnitSystem; // miles and feet.
   avoidHighways?: boolean;
   avoidTolls?: boolean;
   transitOpt?: google.maps.TransitOptions;
+  handlerSaveData?: (data: distanceDataI) => void;
 }
 
-interface dataI {
+export interface distanceDataI {
   km: number;
   mile: number;
   txt?: string;
   val?: number;
 }
-
-const testData = {
-  origin: {
-    lat: 53.203772,
-    lng: 50.1606382,
-  },
-  destination: {
-    lat: 55.755826,
-    lng: 37.6173,
-  },
-};
 
 function useCalculateDistance({
   origin,
@@ -82,9 +74,9 @@ function useCalculateDistance({
   avoidHighways = false,
   avoidTolls = false,
   transitOpt,
+  handlerSaveData,
 }: useCalculateDistanceI) {
-  const [data, setData] = React.useState<dataI>();
-  // console.log("useCalculateDistance", travelMode);
+  const [data, setData] = React.useState<distanceDataI>();
 
   const service = React.useMemo(() => {
     if (typeof window === "undefined") return null;
@@ -93,7 +85,6 @@ function useCalculateDistance({
     new google.maps.DirectionsRenderer({});
     return new google.maps.DistanceMatrixService();
   }, []);
-  // console.log("service", service);
 
   React.useEffect(() => {
     origin &&
@@ -106,16 +97,17 @@ function useCalculateDistance({
           travelMode,
           unitSystem, // miles and feet.
           // unitSystem: google.maps.UnitSystem.metric, // kilometers and meters.
-          transitOptions: transitOpt,
+          // transitOptions: transitOpt,
           avoidHighways,
           avoidTolls,
         },
         (
           a: google.maps.DistanceMatrixResponse | null,
           b: google.maps.DistanceMatrixStatus,
-        ) => callback(a, b, setData),
+        ) => callback(a, b, setData, handlerSaveData),
       );
   }, [origin, destination, service, travelMode]);
+
   return data;
 }
 

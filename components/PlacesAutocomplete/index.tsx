@@ -6,6 +6,7 @@ import { CoordsI } from "./types";
 import { handlerDrawingRoutes } from "components/MainPage/helpers";
 import RadioGroupTravelMode from "./RadioGroupTravelMode";
 import SearchClusterBlock from "./SearchClusterBlock";
+import { distanceDataI } from "hooks/useCalculateDistance";
 
 const PlacesAutocomplete = ({
   r1 = "",
@@ -14,34 +15,23 @@ const PlacesAutocomplete = ({
   maps,
   directionsRenderer,
   directionsService,
-  coords,
   setCoordsToStore,
   swapCoordsPlaces,
+  saveDistance,
 }: {
   r1?: string;
   r2?: string;
   map: google.maps.Map | null;
   maps: typeof google.maps | null;
-  coords: CoordsI | null;
   directionsRenderer: google.maps.DirectionsRenderer | null;
   directionsService: google.maps.DirectionsService | null;
   setCoordsToStore: (coords: CoordsI | null) => void;
   swapCoordsPlaces: () => void;
+  saveDistance: (data: distanceDataI) => void;
 }) => {
   const [radioTravelMode, setTravelMode] = React.useState<TravelMode>(
     TravelMode.TRANSIT,
   );
-
-  // const distance = useCalculateDistance({
-  //   origin: firstPointVal,
-  //   destination: secondPointVal,
-  //   travelMode: TravelMode[radioTravelMode],
-  //   unitSystem: UnitSystem.IMPERIAL,
-  //   transitOpt: {
-  //     modes: [TransitMode.BUS],
-  //   },
-  // });
-  // console.log("distance", distance, firstPointVal, secondPointVal);
 
   function radioHandler(e: React.ChangeEvent<HTMLInputElement>) {
     setTravelMode(e.target.value as TravelMode);
@@ -56,7 +46,6 @@ const PlacesAutocomplete = ({
         />
         <SearchClusterBlock
           swapCoordsPlaces={swapCoordsPlaces}
-          coords={coords}
           setCoordsToStore={setCoordsToStore}
           radioTravelMode={radioTravelMode}
           map={map}
@@ -66,22 +55,9 @@ const PlacesAutocomplete = ({
           handlerDrawingRoutes={handlerDrawingRoutes}
           r1={r1}
           r2={r2}
+          saveDistance={saveDistance}
         />
       </div>
-      {/* <h2>firstPoint</h2>
-      <p>
-        <b>lat:</b>
-        {coords?.firstPoint?.lat || ""} <b>lng</b>:
-        {coords?.firstPoint?.lng || ""}
-      </p>
-      <h2>secondPoint</h2>
-      <p>
-        <b>lat:</b> {coords?.secondPoint?.lat || ""} <b>lng</b>:
-        {coords?.secondPoint?.lng || ""}
-      </p> */}
-      {/* <h3>km {distance?.km}</h3>
-      <h3>mile {distance?.mile}</h3>
-      <h3>Time {distance?.txt}</h3> */}
     </>
   );
 };

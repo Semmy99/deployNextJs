@@ -1,4 +1,4 @@
-import { CoordsI } from "components/PlacesAutocomplete/types";
+import { CoordsI, InputNames } from "components/PlacesAutocomplete/types";
 import { toast } from "react-toastify";
 import { TravelMode } from "./types";
 
@@ -26,39 +26,36 @@ export async function handlerDrawingRoutes(
   directionsRenderer: google.maps.DirectionsRenderer,
   directionService: google.maps.DirectionsService,
 ) {
-  if (!coords.firstPoint || !coords.secondPoint) return;
+  if (!coords[InputNames.FROM] || !coords[InputNames.TO]) return;
   try {
     // Нужн найти дистанцию. и время
-    if (maps && typeof maps.DirectionsRenderer === "function") {
-      // clean previous directions rendered to the map;
-      // const directionsRenderer = new maps.DirectionsRenderer({});
-      // const directionService = new maps.DirectionsService();
-      const directionsResult = await directionService.route({
-        origin: {
-          lat: coords.firstPoint?.lat as number,
-          lng: coords.firstPoint?.lng as number,
-        },
-        destination: {
-          lat: coords.secondPoint?.lat as number,
-          lng: coords.secondPoint?.lng as number,
-        },
-        travelMode: selectedOption,
-      });
-      console.log("directionsResult", directionsResult);
+    // if (maps && typeof maps.DirectionsRenderer === "function") {
+    // clean previous directions rendered to the map;
+    // const directionsRenderer = new maps.DirectionsRenderer({});
+    // const directionService = new maps.DirectionsService();
+    const directionsResult = await directionService.route({
+      origin: {
+        lat: coords[InputNames.FROM]?.lat as number,
+        lng: coords[InputNames.FROM]?.lng as number,
+      },
+      destination: {
+        lat: coords[InputNames.TO]?.lat as number,
+        lng: coords[InputNames.TO]?.lng as number,
+      },
+      travelMode: selectedOption,
+    });
+    directionsRenderer.setDirections(directionsResult);
+    directionsRenderer.setPanel(
+      document.getElementById("sidebar") as HTMLElement,
+    );
 
-      directionsRenderer.setDirections(directionsResult);
-      // console.log("AAAA", document.getElementById("sidebar"));
-      directionsRenderer.setPanel(
-        document.getElementById("sidebar") as HTMLElement,
-      );
+    toast.success("Маршрут отрисован");
 
-      toast.success("Маршрут отрисован");
+    console.log("directionsResult", directionsResult);
 
-      // console.log("directionsResult", directionsResult);
-
-      // directionsRenderer.setOptions({});
-      directionsRenderer.setMap(map);
-    }
+    // directionsRenderer.setOptions({});
+    directionsRenderer.setMap(map);
+    // }
     // const routePolyline =
     //   new google.maps.Polyline(/* options: google.maps.PolylineOptions */);
     // routePolyline.setMap(map);

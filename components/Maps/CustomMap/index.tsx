@@ -6,7 +6,7 @@ import styles from "styles/CustomMap.module.css";
 const AnyReactComponent = ({ text }: any) => (
   <div style={{ color: "red" }}>{text}</div>
 );
-
+// TODO: нужно брать положение юзера
 const defaultProps = {
   center: {
     lat: 53.203772,
@@ -33,10 +33,7 @@ function CustomMap({ setMaps, coords }: CustomMapI) {
 
   return (
     // Important! Always set the container height explicitly
-    <div
-      style={{ height: "30vh", width: "100%" }}
-      className={styles.mapContainer}
-    >
+    <div className={styles.mapContainer}>
       {loaded && (
         <GoogleMapReact
           bootstrapURLKeys={{

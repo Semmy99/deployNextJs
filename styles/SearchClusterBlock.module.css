@@ -1,20 +1,23 @@
-.formField > div {
-  width: 520px;
+.formFieldContainer>div {
+  width: 50%;
 }
+
 .formField {
   display: flex;
+  width: 78%;
+}
+
+.formFieldContainer {
+  display: flex;
   justify-content: center;
-  align-items: center;    
+  align-items: center;
   width: 100%;
+  max-width: 100%;
   padding: 0 10px;
 }
 
-.autocomplete {
-  /* margin-right: 10px; */
-}
-
 .btn {
-  width: 240px;
+  min-width: 240px;
   height: 30px;
   margin-left: 10px;
   height: 41px;
@@ -22,8 +25,6 @@
   border: none;
   border-radius: 5px;
 }
-
-
 
 .refreshIcon {
   margin: 0 10px;
@@ -36,3 +37,19 @@
   align-items: center;
 }
 
+@media (max-width: 900px) {
+  .formField {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .formFieldContainer {
+    padding: 0;
+  }
+
+  .btn {
+    margin-top: 10px;
+    width: 100%;
+    margin-left: 0;
+  }
+}
