@@ -10,13 +10,16 @@ import React from "react";
 import { toJS } from "mobx";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import GoogleMapApi from "components/Maps/GoogleMapApi";
 
 const MainPage = observer(function Home({
   r1,
   r2,
+  a,
 }: {
   r1?: string;
   r2?: string;
+  a?: any;
 }) {
   const {
     MainPageStore: {
@@ -78,7 +81,7 @@ const MainPage = observer(function Home({
       </button> */}
 
         <h1 className={styles.mainHeader}>How to get to</h1>
-
+        {/* TODO: в этом компоненте при билде падает ошибка google is not defined */}
         <div className={styles.headerBlock}>
           <PlacesAutocomplete
             r1={r1}
@@ -117,7 +120,185 @@ const MainPage = observer(function Home({
             <p className={`${styles.distanceVal}`}> {distance?.txt || "-"} </p>
           </div>
         </div>
+        <div className={`${styles.geoIUmagesContainer}`}>
+          <div className={`${styles.geoImageGeoContainer}`}>
+            <p className={`${styles.geoImageGeoHeader}`}>Samara</p>
+            <div className={`${styles.geoImages}`}>
+              <div className={`${styles.geoImage}`}>
+                <Image
+                  src="/mainBG3.jpg"
+                  // fill
+                  alt="Фоновое изображение"
+                  width={200}
+                  height={200}
+                  style={{
+                    objectFit: "cover",
+                    zIndex: "-1",
+                    // maxWidth: 1920,
+                  }}
+                  quality="100"
+                  placeholder="empty"
+                  // blurDataURL="/"
+                />
+              </div>
+              <div className={`${styles.geoImage}`}>
+                <Image
+                  src="/mainBG3.jpg"
+                  // fill
+                  alt="Фоновое изображение"
+                  width={200}
+                  height={200}
+                  style={{
+                    objectFit: "cover",
+                    zIndex: "-1",
+                    // maxWidth: 1920,
+                  }}
+                  quality="100"
+                  placeholder="empty"
+                  // blurDataURL="/"
+                />
+              </div>
+              <div className={`${styles.geoImage}`}>
+                <Image
+                  src="/mainBG3.jpg"
+                  // fill
+                  alt="Фоновое изображение"
+                  width={200}
+                  height={200}
+                  style={{
+                    objectFit: "cover",
+                    zIndex: "-1",
+                    // maxWidth: 1920,
+                  }}
+                  quality="100"
+                  placeholder="empty"
+                  // blurDataURL="/"
+                />
+              </div>
+              <div className={`${styles.geoImage}`}>
+                <Image
+                  src="/mainBG3.jpg"
+                  // fill
+                  alt="Фоновое изображение"
+                  width={200}
+                  height={200}
+                  style={{
+                    objectFit: "cover",
+                    zIndex: "-1",
+                    // maxWidth: 1920,
+                  }}
+                  quality="100"
+                  placeholder="empty"
+                  // blurDataURL="/"
+                />
+              </div>
+              <div className={`${styles.geoImage}`}>
+                <Image
+                  src="/mainBG3.jpg"
+                  // fill
+                  alt="Фоновое изображение"
+                  width={200}
+                  height={200}
+                  style={{
+                    objectFit: "cover",
+                    zIndex: "-1",
+                    // maxWidth: 1920,
+                  }}
+                  quality="100"
+                  placeholder="empty"
+                  // blurDataURL="/"
+                />
+              </div>
+              <div className={`${styles.geoImage}`}>
+                <Image
+                  src="/mainBG3.jpg"
+                  // fill
+                  alt="Фоновое изображение"
+                  width={200}
+                  height={200}
+                  style={{
+                    objectFit: "cover",
+                    zIndex: "-1",
+                    // maxWidth: 1920,
+                  }}
+                  quality="100"
+                  placeholder="empty"
+                  // blurDataURL="/"
+                />
+              </div>
+              <div className={`${styles.geoImage}`}>
+                <Image
+                  src="/mainBG3.jpg"
+                  // fill
+                  alt="Фоновое изображение"
+                  width={200}
+                  height={200}
+                  style={{
+                    objectFit: "cover",
+                    zIndex: "-1",
+                    // maxWidth: 1920,
+                  }}
+                  quality="100"
+                  placeholder="empty"
+                  // blurDataURL="/"
+                />
+              </div>
+              <div className={`${styles.geoImage}`}>
+                <Image
+                  src="/mainBG3.jpg"
+                  // fill
+                  alt="Фоновое изображение"
+                  width={200}
+                  height={200}
+                  style={{
+                    objectFit: "cover",
+                    zIndex: "-1",
+                    // maxWidth: 1920,
+                  }}
+                  quality="100"
+                  placeholder="empty"
+                  // blurDataURL="/"
+                />
+              </div>
+              <div className={`${styles.geoImage}`}>
+                <Image
+                  src="/mainBG3.jpg"
+                  // fill
+                  alt="Фоновое изображение"
+                  width={200}
+                  height={200}
+                  style={{
+                    objectFit: "cover",
+                    zIndex: "-1",
+                    // maxWidth: 1920,
+                  }}
+                  quality="100"
+                  placeholder="empty"
+                  // blurDataURL="/"
+                />
+              </div>
+              <div className={`${styles.geoImage}`}>
+                <Image
+                  src="/mainBG3.jpg"
+                  // fill
+                  alt="Фоновое изображение"
+                  width={200}
+                  height={200}
+                  style={{
+                    objectFit: "cover",
+                    zIndex: "-1",
+                    // maxWidth: 1920,
+                  }}
+                  quality="100"
+                  placeholder="empty"
+                  // blurDataURL="/"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
+      {/* <GoogleMapApi coords={coords} /> */}
       <CustomMap
         setMaps={(map, maps) => {
           setMap(map);
@@ -138,15 +319,3 @@ const MainPage = observer(function Home({
 });
 
 export default MainPage;
-
-export async function getServerSideProps(context: GetServerSideProps) {
-  console.log("context", context);
-
-  const body = await (
-    await fetch("https://jsonplaceholder.typicode.com/todos/1")
-  ).json();
-
-  return {
-    props: { initialState: { data: body }, body }, // will be passed to the page component as props
-  };
-}

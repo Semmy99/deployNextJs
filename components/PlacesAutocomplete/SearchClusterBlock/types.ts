@@ -10,14 +10,6 @@ export type SearchClusterBlockType = {
   maps: typeof google.maps | null;
   directionsRenderer: google.maps.DirectionsRenderer | null;
   directionsService: google.maps.DirectionsService | null;
-  handlerDrawingRoutes(
-    map: google.maps.Map,
-    maps: typeof google.maps,
-    coords: CoordsI,
-    selectedOption: google.maps.TravelMode,
-    directionsRenderer: google.maps.DirectionsRenderer,
-    directionService: google.maps.DirectionsService,
-  ): Promise<void>;
   r1?: string;
   r2?: string;
   saveDistance: (data: distanceDataI) => void;

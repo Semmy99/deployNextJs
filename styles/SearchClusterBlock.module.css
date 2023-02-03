@@ -4,7 +4,7 @@
 
 .formField {
   display: flex;
-  width: 78%;
+  width: 71%;
 }
 
 .formFieldContainer {
@@ -21,9 +21,11 @@
   height: 30px;
   margin-left: 10px;
   height: 41px;
-  background-color: #fff;
+  background: #FF772B;
   border: none;
   border-radius: 5px;
+  color: #fff;
+  font-size: 16px;
 }
 
 .refreshIcon {

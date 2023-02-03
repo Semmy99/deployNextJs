@@ -13,6 +13,10 @@ import { TravelMode, UnitSystem } from "components/MainPage/types";
 import React from "react";
 import useCalculateDistance from "hooks/useCalculateDistance";
 import { SearchClusterBlockType } from "./types";
+import { useRouter } from "next/router";
+import { updateCoordsByQueryParams } from "./helpers";
+import { handlerDrawingRoutes } from "components/MainPage/helpers";
+import { toJS } from "mobx";
 
 function SearchClusterBlock({
   swapCoordsPlaces,
@@ -22,11 +26,12 @@ function SearchClusterBlock({
   maps,
   directionsRenderer,
   directionsService,
-  handlerDrawingRoutes,
   r1,
   r2,
   saveDistance,
 }: SearchClusterBlockType) {
+  const router = useRouter();
+
   const {
     ready: firstPointReady,
     value: firstPointVal,
@@ -46,27 +51,59 @@ function SearchClusterBlock({
   } = usePlacesAutocomplete({
     debounce: 300,
   });
-
-  // установка значений  из query params
   React.useEffect(() => {
-    async function updateCoordsByQueryParams() {
-      const newCoords: CoordsI = {};
-      if (r1) {
-        handleInput(r1, "type", InputNames.FROM);
-        const results = await getGeocode({ address: r1 });
-        const latLng = getLatLng(results[0]);
-        newCoords[InputNames.FROM] = latLng;
+    async function firstRender() {
+      if (router.pathname.includes("route")) {
+        const coords = await handlerGeoCoding(r1 as string, r2 as string);
+
+        radioTravelMode &&
+          map &&
+          maps &&
+          coords &&
+          directionsRenderer &&
+          directionsService &&
+          handlerDrawingRoutes(
+            map,
+            // maps,
+            coords,
+            radioTravelMode,
+            directionsRenderer,
+            directionsService,
+          );
+
+        updateCoordsByQueryParams({
+          r1,
+          r2,
+          setCoordsToStore,
+          handleInput,
+        });
       }
-      if (r2) {
-        handleInput(r2, "type", InputNames.TO);
-        const results = await getGeocode({ address: r2 });
-        const latLng = getLatLng(results[0]);
-        newCoords[InputNames.TO] = latLng;
-      }
-      setCoordsToStore(newCoords);
     }
-    updateCoordsByQueryParams();
-  }, [r1, r2]);
+    firstRender();
+    // setTimeout(() => {
+    // }, 2000);
+  }, [map]);
+  // установка значений  из query params
+  // TODO: не работает из-за того что лежит в эффекте
+  // React.useEffect(() => {
+  //   async function updateCoordsByQueryParams() {
+  //     const newCoords: CoordsI = {};
+  //     if (r1) {
+  //       handleInput(r1, "type", InputNames.FROM);
+  //       const results = await getGeocode({ address: r1 });
+  //       const latLng = getLatLng(results[0]);
+  //       newCoords[InputNames.FROM] = latLng;
+  //     }
+  //     if (r2) {
+  //       handleInput(r2, "type", InputNames.TO);
+  //       const results = await getGeocode({ address: r2 });
+  //       const latLng = getLatLng(results[0]);
+  //       newCoords[InputNames.TO] = latLng;
+  //     }
+  //     setCoordsToStore(newCoords);
+  //   }
+  //   updateCoordsByQueryParams();
+  // }, [r1, r2]);
 
   const handleInput = (
     txt: string,
@@ -97,7 +134,8 @@ function SearchClusterBlock({
 
   const handleSelect = (
     e: React.FormEvent<any>,
-    data: Autosuggest.SuggestionSelectedEventData<google.maps.places.AutocompletePrediction>,
+    // data: Autosuggest.SuggestionSelectedEventData<google.maps.places.AutocompletePrediction>,
+    data: Autosuggest.SuggestionSelectedEventData<any>,
     inputName: InputNames,
   ) => {
     // When user selects a place, we can replace the keyword without request data from API
@@ -112,17 +150,65 @@ function SearchClusterBlock({
     }
   };
 
+  React.useMemo(async () => {
+    async function updateCoordsByQueryParams() {
+      const newCoords: CoordsI = {};
+      if (r1) {
+        handleInput(r1, "type", InputNames.FROM);
+        if (typeof window !== "undefined") {
+          const results = await getGeocode({ address: r1 });
+          const latLng = getLatLng(results[0]);
+          newCoords[InputNames.FROM] = latLng;
+        }
+      }
+      if (r2) {
+        handleInput(r2, "type", InputNames.TO);
+        if (typeof window !== "undefined") {
+          const results = await getGeocode({ address: r2 });
+          const latLng = getLatLng(results[0]);
+          newCoords[InputNames.TO] = latLng;
+        }
+      }
+      setCoordsToStore(newCoords);
+    }
+    updateCoordsByQueryParams();
+    // updateCoordsByQueryParams({
+    //   r1,
+    //   r2,
+    //   setCoordsToStore,
+    //   handleInput,
+    // });
+  }, [r1, r2]);
+
   async function handlerGeoCoding(from: string, to: string) {
-    const fromRes = await getGeocode({ address: from });
-    const latLngFrom = getLatLng(fromRes[0]);
-    const toRes = await getGeocode({ address: to });
-    const latLngTo = getLatLng(toRes[0]);
-    const coords = {
-      [InputNames.FROM]: latLngFrom,
-      [InputNames.TO]: latLngTo,
-    };
-    setCoordsToStore(coords);
-    return coords;
+    try {
+      const fromRes = await getGeocode({ address: from });
+      console.log("fromRes", fromRes);
+
+      const latLngFrom = getLatLng(fromRes[0]);
+      const toRes = await getGeocode({ address: to });
+      // const service = new google.maps.places.PlacesService(
+      //   map as google.maps.Map,
+      // );
+      // service.getDetails({ placeId: toRes[0]?.place_id }, (...a) => {
+      //   console.log("XXXXXXXXXXX", a);
+      //   a[0]?.photos?.forEach((p) => {
+      //     console.log("getUrl", p.getUrl());
+      //   });
+      // });
+
+      const latLngTo = getLatLng(toRes[0]);
+      const coords = {
+        [InputNames.FROM]: latLngFrom,
+        [InputNames.TO]: latLngTo,
+        fromRes,
+        toRes,
+      };
+      setCoordsToStore(coords);
+      return coords;
+    } catch (error) {
+      console.log("handlerGeoCoding ERROR", error);
+    }
   }
 
   useCalculateDistance({
@@ -193,10 +279,6 @@ function SearchClusterBlock({
         title="Построить маршрут"
         onClick={async () => {
           const coords = await handlerGeoCoding(firstPointVal, secondPointVal);
-          // coords?.[InputNames.FROM] &&
-          //   coords?.[InputNames.TO] &&
-          //   setCoordsToStore(coords);
-
           radioTravelMode &&
             map &&
             maps &&
@@ -205,12 +287,22 @@ function SearchClusterBlock({
             directionsService &&
             handlerDrawingRoutes(
               map,
-              maps,
+              // maps,
               coords,
               radioTravelMode,
               directionsRenderer,
               directionsService,
             );
+
+          // router.pathname.includes("route") &&
+          router.push(
+            {
+              pathname: "/route/[r1]/[r2]",
+              query: { r1: firstPointVal, r2: secondPointVal },
+            },
+            undefined,
+            { shallow: true },
+          );
         }}
         disabled={!firstPointVal || !secondPointVal}
         // disabled={!coords?.[InputNames.FROM] || !coords?.[InputNames.TO]}

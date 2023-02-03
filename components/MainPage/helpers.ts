@@ -20,7 +20,7 @@ export const options = [
 
 export async function handlerDrawingRoutes(
   map: google.maps.Map,
-  maps: typeof google.maps,
+  // maps: typeof google.maps,
   coords: CoordsI,
   selectedOption: google.maps.TravelMode,
   directionsRenderer: google.maps.DirectionsRenderer,
@@ -33,6 +33,12 @@ export async function handlerDrawingRoutes(
     // clean previous directions rendered to the map;
     // const directionsRenderer = new maps.DirectionsRenderer({});
     // const directionService = new maps.DirectionsService();
+    // const service = new google.maps.places.PlacesService(map);
+    // service.getDetails({placeId});
+    // service.textSearch({}, (...a) => {
+    //   console.log("AAAAASASAS", a);
+    // });
+
     const directionsResult = await directionService.route({
       origin: {
         lat: coords[InputNames.FROM]?.lat as number,

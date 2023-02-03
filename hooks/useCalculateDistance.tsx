@@ -77,16 +77,19 @@ function useCalculateDistance({
   handlerSaveData,
 }: useCalculateDistanceI) {
   const [data, setData] = React.useState<distanceDataI>();
-
   const service = React.useMemo(() => {
-    if (typeof window === "undefined") return null;
-    // console.log("google", new google.maps.DistanceMatrixService());
+    if (typeof window === "undefined" || typeof google === "undefined") {
+      console.log("AAAAAAAAAAAA", typeof window);
+      console.log("ZZZZZZZZZZZ", typeof google);
+      return null;
+    }
 
     new google.maps.DirectionsRenderer({});
     return new google.maps.DistanceMatrixService();
   }, []);
 
   React.useEffect(() => {
+    if (typeof window === "undefined") return;
     origin &&
       destination &&
       travelMode &&
@@ -107,7 +110,7 @@ function useCalculateDistance({
         ) => callback(a, b, setData, handlerSaveData),
       );
   }, [origin, destination, service, travelMode]);
-
+  if (typeof window === "undefined") return null;
   return data;
 }
 

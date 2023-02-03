@@ -11,31 +11,31 @@ function RadioGroupTravelMode({
   return (
     <div className={styles.radioContainer}>
       <label className={styles.radioLabel}>
-        {TravelMode.TRANSIT}{" "}
+        Общественный транспорт
         <input
           type="radio"
           value={TravelMode.TRANSIT}
-          title={TravelMode.TRANSIT}
+          title={"Общественный транспорт"}
           checked={radioTravelMode === TravelMode.TRANSIT}
           onChange={radioHandler}
         />
       </label>
       <label className={styles.radioLabel}>
-        {TravelMode.DRIVING}{" "}
+        На авто
         <input
           type="radio"
           value={TravelMode.DRIVING}
-          title={TravelMode.DRIVING}
+          title={"На авто"}
           checked={radioTravelMode === TravelMode.DRIVING}
           onChange={radioHandler}
         />
       </label>
       <label className={styles.radioLabel}>
-        {TravelMode.WALKING}{" "}
+        Пешком
         <input
           type="radio"
           value={TravelMode.WALKING}
-          title={TravelMode.WALKING}
+          title={"Пешком"}
           checked={radioTravelMode === TravelMode.WALKING}
           onChange={radioHandler}
         />

@@ -7,6 +7,7 @@ export default class MainPageStore {
   @observable
   coords: CoordsI | null = null;
   distance: distanceDataI | null = null;
+  asd = "";
   constructor() {
     makeObservable(this);
   }
@@ -25,5 +26,10 @@ export default class MainPageStore {
   @action.bound
   saveDistance(data: distanceDataI) {
     this.distance = data;
+  }
+
+  @action.bound
+  setAassd() {
+    this.asd = "OOOOOOOOOOOOOOOOOO";
   }
 }
