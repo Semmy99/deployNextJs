@@ -34,7 +34,7 @@ const HomePage = observer(function Home({
         <h1 className={styles.title}>{data?.title}</h1>
 
         <div className={styles.grid}>
-          <Image
+          {/* <Image
             src="/mainBG.webp"
             layout="responsive"
             style={{ zIndex: "-1" }}
@@ -42,7 +42,7 @@ const HomePage = observer(function Home({
             height="100%"
             // placeholder="blur"
             // blurDataURL="/"
-          />
+          /> */}
         </div>
       </main>
       <footer className={styles.footer}>
