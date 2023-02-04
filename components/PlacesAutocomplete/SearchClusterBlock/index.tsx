@@ -187,6 +187,7 @@ function SearchClusterBlock({
 
       const latLngFrom = getLatLng(fromRes[0]);
       const toRes = await getGeocode({ address: to });
+      // TODO: ПОЛУЧЕНИЕ ФОТО НЕДОДЕЛАНО
       // const service = new google.maps.places.PlacesService(
       //   map as google.maps.Map,
       // );
