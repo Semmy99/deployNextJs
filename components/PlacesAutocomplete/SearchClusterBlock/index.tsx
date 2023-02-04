@@ -53,7 +53,7 @@ function SearchClusterBlock({
   });
   React.useEffect(() => {
     async function firstRender() {
-      if (router.pathname.includes("route")) {
+      if (router.pathname.includes("direction")) {
         const coords = await handlerGeoCoding(r1 as string, r2 as string);
 
         radioTravelMode &&
@@ -297,7 +297,7 @@ function SearchClusterBlock({
           // router.pathname.includes("route") &&
           router.push(
             {
-              pathname: "/route/[r1]/[r2]",
+              pathname: "/direction",
               query: { r1: firstPointVal, r2: secondPointVal },
             },
             undefined,
