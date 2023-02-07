@@ -1,5 +1,4 @@
 .mapContainer {
-  font-family: 'Montserrat';
   color: #FFF;
   font-weight: 700;
   font-size: 64px;
@@ -8,6 +7,5 @@
   max-width: 100%;
   margin: 20px auto 0;
   height: 50vh;
-  padding: 0 5px;  
+  padding: 0 5px;
 }
-

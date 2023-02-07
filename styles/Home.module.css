@@ -7,13 +7,6 @@
 }
 
 
-.headerBlock {
-  max-width: 100%;
-  justify-content: center;
-  align-items: center;
-  margin: 0 auto;
-}
-
 .main {
   padding: 2rem 0;
   flex: 1;
@@ -24,135 +17,11 @@
 }
 
 
-.headerBackgroundContainer {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  z-index: 1;
-}
 
-.headerBackgroundContainer img {
-  width: 100%;
-  height: 100%;
-  max-width: 100% !important;
-}
-
-
-.mainHeader {
-  font-family: 'Montserrat';
-  color: #FFF;
-  font-weight: 700;
-  font-size: 64px;
-  line-height: 130%;
-  margin: 0 0 50px 0;
-}
-
-.containerHeight {
-  height: 500px;
-}
-
-
-.routeInfoBlock {
-  padding: 2rem 0 0 0;
-}
-
-.subHeader {
-  text-align: center;
-  font-size: 24px;
-  line-height: 29px;
-  margin-bottom: 40px;
-}
-
-.distanceFieldContainer {
-  font-size: 18px;
-  display: flex;
-  background: rgba(255, 255, 255, 0.5);
-  box-shadow: -3px 4px 4px 5px rgb(0 0 0 / 25%);
-  padding: 24px 0 32px 0;
-  border-radius: 10px;
-  display: flex;
-  justify-content: center;
-}
-
-.distanceFieldBlock {
-  display: flex;
-  flex-direction: column;
-  width: 300px;
-  max-width: 100%;
-  position: relative;
-  justify-content: space-between;
-  align-items: center;
-  text-align: center;
-}
-
-.distanceFieldBlock::after {
-  content: "";
-  position: absolute;
-  height: 96px;
-  right: 0;
-  top: -15px;
-  border: 1px solid #eae6e6;
-}
-
-.distanceFieldHeader {
-  margin-bottom: 10px;
-  font-family: 'Montserrat';
-  font-style: normal;
-  font-weight: 500;
-  font-size: 20px;
-  line-height: 24px;
-  display: flex;
-  align-items: center;
-  color: #000000;
-}
-
-.distanceVal {
-  font-weight: bold;
-  color: #FF772B;
-}
 
 .sidebar {
   background: rgba(255, 255, 255, 0.5);
   box-shadow: -3px 4px 4px 5px rgb(0 0 0 / 25%);
   padding: 5px;
   border-radius: 10px;
-}
-
-.geoImageGeoContainer {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.geoImages {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  /* align-items: flex-start; */
-}
-
-.geoImage {
-  margin-right: 5px;
-}
-
-
-@media (max-width: 600px) {
-  .headerBackgroundContainer {
-    width: 100%;
-    flex-direction: column;
-  }
-}
-
-@media (max-width: 480px) {
-  .distanceFieldHeader {
-    font-size: 14px;
-    line-height: 14px;
-  }
 }

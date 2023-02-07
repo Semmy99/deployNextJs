@@ -1,7 +1,7 @@
 import MainPage from "components/MainPage";
-import { InputNames } from "components/PlacesAutocomplete/types";
+import { InputNames } from "components/MainPage/PlacesAutocomplete/types";
 import { GetServerSideProps } from "next";
-import { ParamsQuery, WikiDataLangsResponseType } from "./types";
+import { ParamsQuery, WikiDataLangsResponseType } from "types/directionTypes";
 const LanguageDetect = require("languagedetect");
 const lngDetector = new LanguageDetect("iso2");
 const defDataResp = { query: { pages: {} } };
@@ -10,22 +10,24 @@ const defDataResp = { query: { pages: {} } };
 // пример в трелло добавил. в Википедии надо обработать ошибки
 // нужно либо переводить слова на язык по локали и ориентироваться на нее, либо обработать ошибку
 // 2 - Вывод изображений от гугла
+// 3 обработка ошибок от wikipedia, нет гарантии что выведет адекватно инфу. Нужно додумать как реализовать
+// при клике на поиск не выводятся фотки. Нужен юзэффект
 const DirectionPage = ({ ssrData }: { ssrData: ParamsQuery }) => {
   // console.log("ssrData", ssrData);
 
   return (
     <>
-      <div
+      {/* <div
         className="text-container"
         // dangerouslySetInnerHTML={{
         //   __html: ssrData?.wikiData?.[InputNames.FROM].infoCity,
         // }}
       >
         {ssrData?.wikiData?.[InputNames.FROM]?.infoCity}
-      </div>
-      <div className="text-container">
+      </div> */}
+      {/* <div className="text-container">
         {ssrData?.wikiData?.[InputNames.TO]?.infoCity}
-      </div>
+      </div> */}
       <MainPage r1={ssrData.r1 as string} r2={ssrData.r2 as string} />
     </>
   );
@@ -36,7 +38,7 @@ export default DirectionPage;
 export const getServerSideProps: GetServerSideProps<{
   ssrData: ParamsQuery;
 }> = async (context) => {
-  console.log("--------------------------------");
+  // console.log("--------------------------------");
 
   const { r1, r2 } = context.query;
   try {
@@ -69,24 +71,34 @@ export const getServerSideProps: GetServerSideProps<{
     //   (pageIdFrom && descrCityFrom.query.pages[pageIdFrom].extract) || null;
     // const infoCityTo =
     //   (pageIdTo && descrCityTo.query.pages[pageIdTo].extract) || null;
+    console.log("infoCityFrom", infoCityFrom);
 
     return {
       props: {
         ssrData: {
           r1: (context.query as unknown as ParamsQuery).r1 || null,
           r2: (context.query as unknown as ParamsQuery).r2 || null,
-          wikiData: {
-            [InputNames.FROM]: {
-              ...(descrCityFrom || {}),
-              infoCity: infoCityFrom || "",
-            },
-            [InputNames.TO]: {
-              ...(descrCityTo || {}),
-              infoCity: infoCityTo || "",
-            },
+          // wikiData: {
+          //   [InputNames.FROM]: {
+          //     ...(descrCityFrom || {}),
+          //     infoCity: infoCityFrom || "",
+          //   },
+          //   [InputNames.TO]: {
+          //     ...(descrCityTo || {}),
+          //     infoCity: infoCityTo || "",
+          //   },
+          // },
+        },
+        initialState: {
+          [InputNames.FROM]: {
+            ...(descrCityFrom || {}),
+            infoCity: infoCityFrom || "",
+          },
+          [InputNames.TO]: {
+            ...(descrCityTo || {}),
+            infoCity: infoCityTo || "",
           },
         },
-        initialState: { data: { s: "ZHOOOOPAAAA" } },
       },
     };
   } catch (error) {
@@ -123,7 +135,7 @@ async function detectWikiDataLang(city: string, locale: string | undefined) {
   try {
     // если слово длинное с запятыми, забираем первую часть
     const cityFirstPart = city?.split(",")?.[0];
-    console.log("cityFirstPart", cityFirstPart);
+    // console.log("cityFirstPart", cityFirstPart);
 
     // console.log("lngDetector", lngDetector.setLanguageType ("ru"));
     const [detectedLand] = lngDetector.detect(cityFirstPart);
@@ -131,6 +143,8 @@ async function detectWikiDataLang(city: string, locale: string | undefined) {
     // Если яз юзера не равен языку введенного слова
     // нужно найти это слово на языке юзера
     if (detectedLand?.[0] && locale !== detectedLand?.[0]) {
+      // console.log("ZZZZZZZZZZZZZ", detectedLand);
+
       // Находим весь список этих слов на разных языках
       const response = await fetch(
         `https://${detectedLand[0]}.wikipedia.org/w/api.php?action=query&prop=langlinks&titles=${city}&format=json&lllimit=500`,
@@ -150,7 +164,9 @@ async function detectWikiDataLang(city: string, locale: string | undefined) {
     }
     // если равны то отдаем сразу ответ
     if (detectedLand[0] && locale === detectedLand[0]) {
-      return await getWikiData(city, locale);
+      // console.log("AAAAAAAAAAAAA");
+
+      return await getWikiData(cityFirstPart, locale);
     }
     return defDataResp;
   } catch (error) {
@@ -165,8 +181,11 @@ async function getWikiData(city: string, locale = "en") {
       `https://${locale}.wikipedia.org/w/api.php?action=query&prop=extracts&exintro&explaintext&titles=${city}&format=json&indexpageids`,
       // `https://${locale}.wikipedia.org/w/api.php?action=query&prop=langlinks&exintro&explaintext&titles=${city}&format=json&indexpageids`,
     );
+    // console.log("locale", locale);
+    // console.log("city", city);
+
     const wikiData = await response.json();
-    console.log("wikiData", wikiData);
+    // console.log("wikiData", wikiData?.query);
 
     // const pageId = Object.keys(wikiData.query.pages)[0];
     // const extract = wikiData.query.pages[pageId].extract;
@@ -175,7 +194,7 @@ async function getWikiData(city: string, locale = "en") {
     // return extract;
     return wikiData;
   } catch (error) {
-    console.log("getWikiData ERROR");
+    console.log("getWikiData ERROR", error);
     return { r1: "", r2: "" };
   }
 }

@@ -1,5 +1,3 @@
-import { InputNames } from "components/PlacesAutocomplete/types";
-
 export type WikiDataLangsResponseType = {
   query: {
     pages: {
@@ -31,14 +29,18 @@ export type WikiDataType = {
 export interface ParamsQuery {
   r1: string | null;
   r2: string | null;
-  wikiData?: {
-    [InputNames.FROM]?: {
-      query: WikiDataType;
-      infoCity: string;
-    };
-    [InputNames.TO]?: {
-      query: WikiDataType;
-      infoCity: string;
-    };
-  };
 }
+// export interface ParamsQuery {
+//   r1: string | null;
+//   r2: string | null;
+//   wikiData?: {
+//     [InputNames.FROM]?: {
+//       query: WikiDataType;
+//       infoCity: string;
+//     };
+//     [InputNames.TO]?: {
+//       query: WikiDataType;
+//       infoCity: string;
+//     };
+//   };
+// }

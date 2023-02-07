@@ -27,6 +27,8 @@ function callbackDefault(
           val: duration?.value,
         };
         setData(resData);
+        // console.log("resData", resData);
+
         handlerSaveData && handlerSaveData(resData);
       }
     }
@@ -76,11 +78,12 @@ function useCalculateDistance({
   transitOpt,
   handlerSaveData,
 }: useCalculateDistanceI) {
+  // console.log("useCalculateDistance");
+
   const [data, setData] = React.useState<distanceDataI>();
   const service = React.useMemo(() => {
     if (typeof window === "undefined" || typeof google === "undefined") {
-      console.log("AAAAAAAAAAAA", typeof window);
-      console.log("ZZZZZZZZZZZ", typeof google);
+      // console.log("ZZZZZZZZZZZ", typeof google);
       return null;
     }
 
@@ -90,6 +93,7 @@ function useCalculateDistance({
 
   React.useEffect(() => {
     if (typeof window === "undefined") return;
+
     origin &&
       destination &&
       travelMode &&

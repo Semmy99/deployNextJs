@@ -6,6 +6,7 @@ import { CoordsI } from "./types";
 import RadioGroupTravelMode from "./RadioGroupTravelMode";
 import SearchClusterBlock from "./SearchClusterBlock";
 import { distanceDataI } from "hooks/useCalculateDistance";
+import { imagesGeoType, wikiDataType } from "store/MainPageStore";
 
 const PlacesAutocomplete = ({
   r1 = "",
@@ -17,6 +18,7 @@ const PlacesAutocomplete = ({
   setCoordsToStore,
   swapCoordsPlaces,
   saveDistance,
+  saveGeoImages,
 }: {
   r1?: string;
   r2?: string;
@@ -27,6 +29,7 @@ const PlacesAutocomplete = ({
   setCoordsToStore: (coords: CoordsI | null) => void;
   swapCoordsPlaces: () => void;
   saveDistance: (data: distanceDataI) => void;
+  saveGeoImages: (images: imagesGeoType) => void;
 }) => {
   const [radioTravelMode, setTravelMode] = React.useState<TravelMode>(
     TravelMode.TRANSIT,
@@ -54,6 +57,7 @@ const PlacesAutocomplete = ({
           r1={r1}
           r2={r2}
           saveDistance={saveDistance}
+          saveGeoImages={saveGeoImages}
         />
       </div>
     </>

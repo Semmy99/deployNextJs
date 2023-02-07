@@ -1,18 +1,22 @@
 .autocompleteContainer :global .react-autosuggest__container {
   position: relative;
-  max-width: 520px;
+  max-width: 275px;
+  /* max-width: 520px; */
   width: 100%;
 }
 
 .autocompleteContainer :global .react-autosuggest__input {
   width: 100%;
-  height: 41px;
+  height: 50px;
   padding: 10px 20px;
-  font-family: Helvetica, sans-serif;
-  font-weight: 300;
-  font-size: 16px;
   border: 1px solid #aaa;
-  border-radius: 4px;
+  /* border-radius: 4px; */
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  color: #545A58;
+  border: 1px solid #E7E7E7;
 }
 
 .autocompleteContainer :global .react-autosuggest__input:focus {

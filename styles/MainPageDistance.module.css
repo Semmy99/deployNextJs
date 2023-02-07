@@ -1,0 +1,142 @@
+.distanceInfoBlock {
+  padding: 90px 0 0 0;
+}
+
+.distanceSubHeader {
+  text-align: center;
+  font-size: 24px;
+  line-height: 29px;
+  margin-bottom: 30px;
+  font-size: 32px;
+  line-height: 39px;
+  color: #31353B;
+}
+
+.distanceFieldContainer {
+  font-size: 18px;
+  display: flex;
+  background: rgba(255, 255, 255, 0.5);
+  padding: 24px 0 32px 0;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.distanceFieldBlock {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  max-width: 100%;
+  position: relative;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+}
+
+
+
+/* .distanceFieldBlock::after {
+  content: "";
+  position: absolute;
+  height: 96px;
+  right: 0;
+  top: -15px;
+  border: 1px solid #eae6e6;
+} */
+
+.distanceFieldHeader {
+  margin-bottom: 10px;
+  display: flex;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid #FF772A;
+  color: #000000;
+  padding: 17px 36px;
+  width: 250px;
+  border-radius: 5px;
+}
+
+/* .distanceFieldHeader::after {
+  content: "";
+  position: absolute;
+  width: 200px;
+  height: 2px;
+  background: red;
+  background: url("../public/line.svg") no-repeat 0 0;
+  right: 250px;
+} */
+
+.distanceFieldBlock:last-of-type>.distanceFieldHeader:after {
+  display: none;
+}
+
+.distanceVal {
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 39px;
+  display: flex;
+  align-items: center;
+
+  color: #FF772A;
+
+}
+
+
+@media (max-width: 1415px) {
+  .headerBlockSubTitle {
+    width: 100%;
+    text-align: center;
+    line-height: initial;
+  }
+}
+
+@media (max-width: 800px) {
+  .Home_headerContainerHeight {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .headerBlockSide:first-child {
+    width: 100%;
+    z-index: 1;
+    background: #E0F9FC;
+    align-items: center;
+  }
+
+  .headerBlockSide:last-child {
+    display: none;
+    /* position: absolute; */
+    /* width: 100%; */
+  }
+
+  .headerBlockSideMobilePhone {
+    display: block;
+  }
+}
+
+@media (max-width: 780px) {
+  .distanceFieldContainer {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .distanceFieldHeader {
+    margin: 0;
+  }
+
+  .distanceVal {
+    margin: 10px 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .distanceFieldHeader {
+    font-size: 14px;
+    line-height: 14px;
+  }
+}

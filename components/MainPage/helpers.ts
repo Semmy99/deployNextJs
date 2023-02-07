@@ -1,4 +1,7 @@
-import { CoordsI, InputNames } from "components/PlacesAutocomplete/types";
+import {
+  CoordsI,
+  InputNames,
+} from "components/MainPage/PlacesAutocomplete/types";
 import { toast } from "react-toastify";
 import { TravelMode } from "./types";
 
@@ -57,7 +60,7 @@ export async function handlerDrawingRoutes(
 
     toast.success("Маршрут отрисован");
 
-    console.log("directionsResult", directionsResult);
+    // console.log("w", directionsResult);
 
     // directionsRenderer.setOptions({});
     directionsRenderer.setMap(map);

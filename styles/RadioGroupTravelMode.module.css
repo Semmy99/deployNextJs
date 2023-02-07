@@ -25,6 +25,30 @@
   margin-right: 0;
 }
 
+.radioLabel {
+  padding: 3px 4px;
+  border-radius: 5px;
+}
+
+.radioLabel svg {
+  padding: 5px;
+  width: 40px;
+  height: 40px;
+  border-radius: 5px;
+}
+
+.radioLabel.active svg,
+.radioLabel:hover svg {
+  background-color: #fff;
+  color: #fff;
+  fill: #fff;
+  background: #ff772b;
+}
+
+.radioTravel {
+  display: none;
+}
+
 @media (max-width: 480px) {
   .radioLabel {
     margin-right: 4px;

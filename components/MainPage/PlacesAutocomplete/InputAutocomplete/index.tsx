@@ -5,7 +5,7 @@ import parse from "autosuggest-highlight/parse";
 import styles from "styles/InputAutocomplete.module.css";
 import { getSuggestionValue } from "./helpers";
 import { ClearSuggestions } from "use-places-autocomplete";
-import { InputNames } from "components/PlacesAutocomplete/types";
+import { InputNames } from "../types";
 
 // Use your imagination to render suggestions.
 function renderSuggestion(

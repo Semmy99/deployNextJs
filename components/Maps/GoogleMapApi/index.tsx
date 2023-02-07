@@ -1,8 +1,9 @@
 import React from "react";
 import { GoogleMap, useJsApiLoader } from "@react-google-maps/api";
 import styles from "styles/CustomMap.module.css";
-import { CoordsI } from "components/PlacesAutocomplete/types";
+
 import { toJS } from "mobx";
+import { CoordsI } from "components/MainPage/PlacesAutocomplete/types";
 
 const containerStyle = {
   width: "100vw",

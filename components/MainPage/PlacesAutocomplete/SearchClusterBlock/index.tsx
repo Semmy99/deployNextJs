@@ -17,6 +17,7 @@ import { useRouter } from "next/router";
 import { updateCoordsByQueryParams } from "./helpers";
 import { handlerDrawingRoutes } from "components/MainPage/helpers";
 import { toJS } from "mobx";
+import { imagesGeoType } from "store/MainPageStore";
 
 function SearchClusterBlock({
   swapCoordsPlaces,
@@ -29,6 +30,7 @@ function SearchClusterBlock({
   r1,
   r2,
   saveDistance,
+  saveGeoImages,
 }: SearchClusterBlockType) {
   const router = useRouter();
 
@@ -181,23 +183,43 @@ function SearchClusterBlock({
   }, [r1, r2]);
 
   async function handlerGeoCoding(from: string, to: string) {
+    // console.log("handlerGeoCoding");
+
     try {
       const fromRes = await getGeocode({ address: from });
-      console.log("fromRes", fromRes);
+      // console.log("fromRes", fromRes);
 
       const latLngFrom = getLatLng(fromRes[0]);
       const toRes = await getGeocode({ address: to });
       // TODO: ПОЛУЧЕНИЕ ФОТО НЕДОДЕЛАНО
-      // const service = new google.maps.places.PlacesService(
-      //   map as google.maps.Map,
-      // );
-      // service.getDetails({ placeId: toRes[0]?.place_id }, (...a) => {
-      //   console.log("XXXXXXXXXXX", a);
-      //   a[0]?.photos?.forEach((p) => {
-      //     console.log("getUrl", p.getUrl());
-      //   });
-      // });
+      const service = new google.maps.places.PlacesService(
+        map as google.maps.Map,
+      );
+      const imagesData: imagesGeoType = { from: [], to: [] };
+      if (fromRes[0]?.place_id) {
+        service.getDetails({ placeId: fromRes[0]?.place_id }, (...a) => {
+          const imagesLink: string[] = [];
+          a[0]?.photos?.forEach((p) => {
+            const link = p.getUrl();
+            if (link) imagesLink.push(link);
+          });
+          imagesData.from = imagesLink;
+        });
+      }
+      if (toRes[0]?.place_id) {
+        service.getDetails({ placeId: toRes[0]?.place_id }, (...a) => {
+          const imagesLink: string[] = [];
+          a[0]?.photos?.forEach((p) => {
+            const link = p.getUrl();
+            if (link) imagesLink.push(link);
+          });
+          imagesData.to = imagesLink;
+        });
+      }
 
+      console.log("imagesData", imagesData);
+      saveGeoImages(imagesData);
+      //-----------------------------------------------------------------
       const latLngTo = getLatLng(toRes[0]);
       const coords = {
         [InputNames.FROM]: latLngFrom,
@@ -256,8 +278,8 @@ function SearchClusterBlock({
             alt="Поменять значения местами"
             quality="100"
             placeholder="empty"
-            width={20}
-            height={20}
+            width={30}
+            height={30}
             // blurDataURL="/"
           />
         </span>
@@ -277,7 +299,7 @@ function SearchClusterBlock({
         </OutsideClickHandler>
       </div>
       <Button
-        title="Построить маршрут"
+        title="Поиск"
         onClick={async () => {
           const coords = await handlerGeoCoding(firstPointVal, secondPointVal);
           radioTravelMode &&

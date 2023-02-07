@@ -14,7 +14,8 @@ export default class RootStore {
     this[MAIN_PAGE_STORE] = new MainPageStore();
   }
   @action.bound
-  hydrate() {
-    console.log("");
+  hydrate(initData: any) {
+    // console.log("initData", initData);
+    this[MAIN_PAGE_STORE] = new MainPageStore(initData);
   }
 }

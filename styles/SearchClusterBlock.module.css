@@ -4,8 +4,11 @@
 
 .formField {
   display: flex;
-  width: 71%;
+  position: relative;
+  /* box-shadow: 0px 0px 30px #ff772b; */
 }
+
+
 
 .formFieldContainer {
   display: flex;
@@ -13,31 +16,31 @@
   align-items: center;
   width: 100%;
   max-width: 100%;
-  padding: 0 10px;
 }
 
 .btn {
-  min-width: 240px;
+  min-width: 115px;
   height: 30px;
-  margin-left: 10px;
-  height: 41px;
+  margin-left: 2px;
+  height: 50px;
   background: #FF772B;
   border: none;
   border-radius: 5px;
   color: #fff;
   font-size: 16px;
   cursor: pointer;
+  border-radius: 0px 8px 8px 0px;
 }
 
 .refreshIcon {
-  margin: 0 10px;
+  margin: 0 2px;
   cursor: pointer;
-  border-radius: 4px;
   background: #fff;
-  padding: 10px 13px;
+  padding: 9px 13px;
   display: flex;
   justify-content: center;
   align-items: center;
+  border: 1px solid #E7E7E7;
 }
 
 @media (max-width: 900px) {

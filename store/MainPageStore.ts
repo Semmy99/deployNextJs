@@ -1,14 +1,33 @@
-import { InputNames } from "./../components/PlacesAutocomplete/types";
-import { CoordsI } from "components/PlacesAutocomplete/types";
 import { action, makeObservable, observable, toJS } from "mobx";
 import { distanceDataI } from "hooks/useCalculateDistance";
+import {
+  CoordsI,
+  InputNames,
+} from "components/MainPage/PlacesAutocomplete/types";
 export const MAIN_PAGE_STORE = "MainPageStore";
+
+export type wikiDataType = {
+  from: {
+    infoCity: string;
+    query: { pages: any };
+  };
+  to: {
+    infoCity: string;
+    query: { pages: any };
+  };
+};
+
+export type imagesGeoType = { from: string[]; to: string[] } | null;
 export default class MainPageStore {
   @observable
   coords: CoordsI | null = null;
   distance: distanceDataI | null = null;
-  asd = "";
-  constructor() {
+  wikiData: wikiDataType;
+  imagesGeo: imagesGeoType;
+
+  constructor(initData?: any) {
+    this.wikiData = initData || null;
+    this.imagesGeo = null;
     makeObservable(this);
   }
   @action.bound
@@ -27,9 +46,8 @@ export default class MainPageStore {
   saveDistance(data: distanceDataI) {
     this.distance = data;
   }
-
   @action.bound
-  setAassd() {
-    this.asd = "OOOOOOOOOOOOOOOOOO";
+  saveGeoImages(images: imagesGeoType) {
+    this.imagesGeo = images;
   }
 }

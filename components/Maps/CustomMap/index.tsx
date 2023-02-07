@@ -1,8 +1,8 @@
 import { GetServerSideProps } from "next";
 import React from "react";
 import GoogleMapReact from "google-map-react";
-import { CoordsI } from "components/PlacesAutocomplete/types";
 import styles from "styles/CustomMap.module.css";
+import { CoordsI } from "components/MainPage/PlacesAutocomplete/types";
 const AnyReactComponent = ({ text }: any) => (
   <div style={{ color: "red" }}>{text}</div>
 );

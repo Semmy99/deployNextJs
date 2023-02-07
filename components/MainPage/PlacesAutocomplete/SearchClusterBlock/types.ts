@@ -1,5 +1,6 @@
 import { TravelMode } from "components/MainPage/types";
 import { distanceDataI } from "hooks/useCalculateDistance";
+import { imagesGeoType } from "store/MainPageStore";
 import { CoordsI } from "../types";
 
 export type SearchClusterBlockType = {
@@ -13,4 +14,5 @@ export type SearchClusterBlockType = {
   r1?: string;
   r2?: string;
   saveDistance: (data: distanceDataI) => void;
+  saveGeoImages: (images: imagesGeoType) => void;
 };
