@@ -16,23 +16,40 @@ import { SearchClusterBlockType } from "./types";
 import { useRouter } from "next/router";
 import { updateCoordsByQueryParams } from "./helpers";
 import { handlerDrawingRoutes } from "components/MainPage/helpers";
-import { toJS } from "mobx";
-import { imagesGeoType } from "store/MainPageStore";
+import { observer } from "mobx-react-lite";
+import { useStore } from "components/StoreProvider";
+import { getCityInfoByWiki } from "components/wikiHelpers";
 
 function SearchClusterBlock({
-  swapCoordsPlaces,
-  setCoordsToStore,
   radioTravelMode,
   map,
   maps,
   directionsRenderer,
   directionsService,
-  r1,
-  r2,
-  saveDistance,
-  saveGeoImages,
 }: SearchClusterBlockType) {
   const router = useRouter();
+  const { r1, r2 } = router.query;
+  const {
+    MainPageStore: {
+      coords,
+      setCoordsToStore,
+      swapCoordsPlaces,
+      saveDistance,
+      distance,
+      wikiData,
+      saveGeoImages,
+      imagesGeo,
+      randomNumber,
+      saveRandomNumber,
+      saveGeoImages1,
+      setQueryParams,
+      setWikiToStore,
+      savePolylinesCoord,
+      polylines,
+      saveMarkersCoord,
+      markers,
+    },
+  } = useStore();
 
   const {
     ready: firstPointReady,
@@ -41,7 +58,7 @@ function SearchClusterBlock({
     suggestions: { status: firstPointStatus, data: firstPointData },
     clearSuggestions: firstPointClearSuggestions,
   } = usePlacesAutocomplete({
-    debounce: 300,
+    debounce: 500,
   });
 
   const {
@@ -51,7 +68,7 @@ function SearchClusterBlock({
     suggestions: { status: secondPointStatus, data: secondPointData },
     clearSuggestions: secondPointClearSuggestions,
   } = usePlacesAutocomplete({
-    debounce: 300,
+    debounce: 500,
   });
   React.useEffect(() => {
     async function firstRender() {
@@ -66,46 +83,30 @@ function SearchClusterBlock({
           directionsService &&
           handlerDrawingRoutes(
             map,
-            // maps,
+            maps,
             coords,
             radioTravelMode,
             directionsRenderer,
             directionsService,
+            savePolylinesCoord,
+            polylines,
+            saveMarkersCoord,
+            markers,
           );
 
         updateCoordsByQueryParams({
-          r1,
-          r2,
+          r1: r1 as string,
+          r2: r2 as string,
           setCoordsToStore,
           handleInput,
+          wikiData,
+          setWikiToStore,
+          locale: router.locale,
         });
       }
     }
     firstRender();
-    // setTimeout(() => {
-    // }, 2000);
   }, [map]);
-  // установка значений  из query params
-  // TODO: не работает из-за того что лежит в эффекте
-  // React.useEffect(() => {
-  //   async function updateCoordsByQueryParams() {
-  //     const newCoords: CoordsI = {};
-  //     if (r1) {
-  //       handleInput(r1, "type", InputNames.FROM);
-  //       const results = await getGeocode({ address: r1 });
-  //       const latLng = getLatLng(results[0]);
-  //       newCoords[InputNames.FROM] = latLng;
-  //     }
-  //     if (r2) {
-  //       handleInput(r2, "type", InputNames.TO);
-  //       const results = await getGeocode({ address: r2 });
-  //       const latLng = getLatLng(results[0]);
-  //       newCoords[InputNames.TO] = latLng;
-  //     }
-  //     setCoordsToStore(newCoords);
-  //   }
-  //   updateCoordsByQueryParams();
-  // }, [r1, r2]);
 
   const handleInput = (
     txt: string,
@@ -152,75 +153,21 @@ function SearchClusterBlock({
     }
   };
 
-  React.useMemo(async () => {
-    async function updateCoordsByQueryParams() {
-      const newCoords: CoordsI = {};
-      if (r1) {
-        handleInput(r1, "type", InputNames.FROM);
-        if (typeof window !== "undefined") {
-          const results = await getGeocode({ address: r1 });
-          const latLng = getLatLng(results[0]);
-          newCoords[InputNames.FROM] = latLng;
-        }
-      }
-      if (r2) {
-        handleInput(r2, "type", InputNames.TO);
-        if (typeof window !== "undefined") {
-          const results = await getGeocode({ address: r2 });
-          const latLng = getLatLng(results[0]);
-          newCoords[InputNames.TO] = latLng;
-        }
-      }
-      setCoordsToStore(newCoords);
-    }
-    updateCoordsByQueryParams();
-    // updateCoordsByQueryParams({
-    //   r1,
-    //   r2,
-    //   setCoordsToStore,
-    //   handleInput,
-    // });
-  }, [r1, r2]);
-
   async function handlerGeoCoding(from: string, to: string) {
     // console.log("handlerGeoCoding");
 
     try {
       const fromRes = await getGeocode({ address: from });
-      // console.log("fromRes", fromRes);
-
-      const latLngFrom = getLatLng(fromRes[0]);
       const toRes = await getGeocode({ address: to });
-      // TODO: ПОЛУЧЕНИЕ ФОТО НЕДОДЕЛАНО
-      const service = new google.maps.places.PlacesService(
-        map as google.maps.Map,
-      );
-      const imagesData: imagesGeoType = { from: [], to: [] };
-      if (fromRes[0]?.place_id) {
-        service.getDetails({ placeId: fromRes[0]?.place_id }, (...a) => {
-          const imagesLink: string[] = [];
-          a[0]?.photos?.forEach((p) => {
-            const link = p.getUrl();
-            if (link) imagesLink.push(link);
-          });
-          imagesData.from = imagesLink;
-        });
-      }
-      if (toRes[0]?.place_id) {
-        service.getDetails({ placeId: toRes[0]?.place_id }, (...a) => {
-          const imagesLink: string[] = [];
-          a[0]?.photos?.forEach((p) => {
-            const link = p.getUrl();
-            if (link) imagesLink.push(link);
-          });
-          imagesData.to = imagesLink;
-        });
-      }
-
-      console.log("imagesData", imagesData);
-      saveGeoImages(imagesData);
-      //-----------------------------------------------------------------
+      const latLngFrom = getLatLng(fromRes[0]);
       const latLngTo = getLatLng(toRes[0]);
+
+      // TODO: ПОЛУЧЕНИЕ ФОТО НЕДОДЕЛАНО
+      if (map) {
+        saveGeoImages1(map, fromRes[0]?.place_id, "from");
+        saveGeoImages1(map, toRes[0]?.place_id, "to");
+      }
+      //-----------------------------------------------------------------
       const coords = {
         [InputNames.FROM]: latLngFrom,
         [InputNames.TO]: latLngTo,
@@ -233,7 +180,6 @@ function SearchClusterBlock({
       console.log("handlerGeoCoding ERROR", error);
     }
   }
-
   useCalculateDistance({
     origin: firstPointVal,
     destination: secondPointVal,
@@ -244,6 +190,18 @@ function SearchClusterBlock({
 
   return (
     <div className={styles.formField}>
+      {/* {randomNumber}
+
+      <button
+        onClick={() => {
+          // directionsRenderer?.setMap(null);
+          // setCoordsToStore(null);
+
+          saveRandomNumber(Math.random());
+        }}
+      >
+        CLEAR
+      </button> */}
       <div className={styles.formFieldContainer}>
         <OutsideClickHandler
           onOutsideClick={() => {
@@ -255,7 +213,7 @@ function SearchClusterBlock({
           <div>
             <InputAutocomplete
               handleInput={handleInput}
-              value={firstPointVal}
+              value={firstPointVal || (r1 as string) || ""}
               suggestions={firstPointData}
               handleSelect={handleSelect}
               clearSuggestions={firstPointClearSuggestions}
@@ -287,7 +245,7 @@ function SearchClusterBlock({
           <div>
             <InputAutocomplete
               handleInput={handleInput}
-              value={secondPointVal}
+              value={secondPointVal || (r2 as string) || ""}
               suggestions={secondPointData}
               handleSelect={handleSelect}
               clearSuggestions={secondPointClearSuggestions}
@@ -310,22 +268,37 @@ function SearchClusterBlock({
             directionsService &&
             handlerDrawingRoutes(
               map,
-              // maps,
+              maps,
               coords,
               radioTravelMode,
               directionsRenderer,
               directionsService,
+              savePolylinesCoord,
+              polylines,
+              saveMarkersCoord,
+              markers,
             );
-
-          // router.pathname.includes("route") &&
-          router.push(
-            {
-              pathname: "/direction",
-              query: { r1: firstPointVal, r2: secondPointVal },
-            },
-            undefined,
-            { shallow: true },
+          let url = new URL(window.location.href);
+          if (!url.toString().includes("direction")) {
+            url = new URL(`${window.location.href}/direction`);
+          }
+          url.searchParams.set("r1", firstPointVal);
+          url.searchParams.set("r2", secondPointVal);
+          setQueryParams({ r1: firstPointVal, r2: secondPointVal });
+          window.history.pushState({}, "direction", url.toString());
+          const descrCityFrom = await getCityInfoByWiki(
+            firstPointVal,
+            router.locale,
           );
+          const descrCityTo = await getCityInfoByWiki(
+            secondPointVal,
+            router.locale,
+          );
+
+          setWikiToStore({
+            [InputNames.FROM]: descrCityFrom,
+            [InputNames.TO]: descrCityTo,
+          });
         }}
         disabled={!firstPointVal || !secondPointVal}
         // disabled={!coords?.[InputNames.FROM] || !coords?.[InputNames.TO]}
@@ -335,4 +308,4 @@ function SearchClusterBlock({
   );
 }
 
-export default SearchClusterBlock;
+export default observer(SearchClusterBlock);

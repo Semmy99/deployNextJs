@@ -2,7 +2,6 @@ import React from "react";
 import { GoogleMap, useJsApiLoader } from "@react-google-maps/api";
 import styles from "styles/CustomMap.module.css";
 
-import { toJS } from "mobx";
 import { CoordsI } from "components/MainPage/PlacesAutocomplete/types";
 
 const containerStyle = {
@@ -34,7 +33,6 @@ function GoogleMapApi({ coords }: { coords: CoordsI | null }) {
   const onUnmount = React.useCallback(function callback(map: google.maps.Map) {
     setMap(null);
   }, []);
-  console.log("coords", toJS(coords));
 
   return isLoaded ? (
     <div className={styles.mapContainer}>

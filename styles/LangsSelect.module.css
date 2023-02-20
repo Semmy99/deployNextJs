@@ -1,0 +1,19 @@
+.langsSelectContainer {
+  /* width: 110px; */
+}
+
+.optionsContainer {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+}
+
+.optionsContainer img {
+  margin-right: 10px;
+}
+
+.selectWrapper {
+  display: flex;
+  justify-content: flex-end;
+  z-index: 30;
+}

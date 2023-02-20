@@ -4,6 +4,7 @@ import styles from "styles/RadioGroupTravelMode.module.css";
 import Car from "../../../../public/car.svg";
 import Bus from "../../../../public/bus.svg";
 import Pedestrian from "../../../../public/pedestrian.svg";
+import Plane from "../../../../public/plane.svg";
 
 function RadioGroupTravelMode({
   radioTravelMode,
@@ -20,20 +21,6 @@ function RadioGroupTravelMode({
         }`}
       >
         <Bus width={30} height={30} />
-        {/* <Image
-          src="/bus.svg"
-          alt="Фоновое изображение"
-          width={20}
-          height={20}
-          // style={{
-          //   objectFit: "cover",
-          //   zIndex: "-1",
-          // }}
-          quality="100"
-          placeholder="empty"
-          // blurDataURL="/"
-        /> */}
-        {/* Общественный транспорт */}
         <input
           type="radio"
           value={TravelMode.TRANSIT}
@@ -48,7 +35,6 @@ function RadioGroupTravelMode({
           radioTravelMode === TravelMode.DRIVING ? styles.active : ""
         }`}
       >
-        {/* На авто */}
         <Car width={30} height={30} />
         <input
           type="radio"
@@ -64,7 +50,6 @@ function RadioGroupTravelMode({
           radioTravelMode === TravelMode.WALKING ? styles.active : ""
         }`}
       >
-        {/* Пешком */}
         <Pedestrian width={30} height={30} />
         <input
           type="radio"
@@ -75,41 +60,21 @@ function RadioGroupTravelMode({
           className={styles.radioTravel}
         />
       </label>
-      {/* <label className={styles.radioLabel}>
-        Общественный транспорт
+      <label
+        className={`${styles.radioLabel} ${
+          radioTravelMode === TravelMode.PLANE ? styles.active : ""
+        }`}
+      >
+        <Plane width={30} height={30} />
         <input
           type="radio"
-          value={TravelMode.TRANSIT}
-          title={"Общественный транспорт"}
-          checked={radioTravelMode === TravelMode.TRANSIT}
+          value={TravelMode.PLANE}
+          title={"Самолет"}
+          checked={radioTravelMode === TravelMode.PLANE}
           onChange={radioHandler}
-          // style={{
-          //   opacity: 0,
-          //   position: "absolute",
-          //   zIndex: "-100",
-          // }}
+          className={styles.radioTravel}
         />
       </label>
-      <label className={styles.radioLabel}>
-        На авто
-        <input
-          type="radio"
-          value={TravelMode.DRIVING}
-          title={"На авто"}
-          checked={radioTravelMode === TravelMode.DRIVING}
-          onChange={radioHandler}
-        />
-      </label>
-      <label className={styles.radioLabel}>
-        Пешком
-        <input
-          type="radio"
-          value={TravelMode.WALKING}
-          title={"Пешком"}
-          checked={radioTravelMode === TravelMode.WALKING}
-          onChange={radioHandler}
-        />
-      </label> */}
     </div>
   );
 }

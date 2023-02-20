@@ -1,7 +1,5 @@
+import { TravelMode } from "components/MainPage/types";
 import React from "react";
-import { LatLng } from "use-places-autocomplete";
-// let google: any = {};
-// get distance results(
 
 function callbackDefault(
   response: google.maps.DistanceMatrixResponse | null,
@@ -14,7 +12,7 @@ function callbackDefault(
     const origin = response?.originAddresses[0];
     const destination = response?.destinationAddresses[0];
     if (response?.rows[0].elements[0].status === "ZERO_RESULTS") {
-      console.log("Better get on a plane. There are no roads between ");
+      console.log("ZERO_RESULTS");
       return;
     } else {
       const distance = response?.rows[0].elements[0].distance;
@@ -52,7 +50,7 @@ interface useCalculateDistanceI {
     c: any,
     handlerSaveData?: (data: distanceDataI) => void,
   ) => void;
-  travelMode?: google.maps.TravelMode;
+  travelMode: TravelMode;
   unitSystem: google.maps.UnitSystem; // miles and feet.
   avoidHighways?: boolean;
   avoidTolls?: boolean;
@@ -79,18 +77,16 @@ function useCalculateDistance({
   handlerSaveData,
 }: useCalculateDistanceI) {
   // console.log("useCalculateDistance");
-
   const [data, setData] = React.useState<distanceDataI>();
   const service = React.useMemo(() => {
     if (typeof window === "undefined" || typeof google === "undefined") {
-      // console.log("ZZZZZZZZZZZ", typeof google);
       return null;
     }
 
     new google.maps.DirectionsRenderer({});
     return new google.maps.DistanceMatrixService();
   }, []);
-
+  // TODO: обработать самолеты
   React.useEffect(() => {
     if (typeof window === "undefined") return;
 
@@ -101,7 +97,7 @@ function useCalculateDistance({
         {
           origins: [origin],
           destinations: [destination],
-          travelMode,
+          travelMode: travelMode as google.maps.TravelMode,
           unitSystem, // miles and feet.
           // unitSystem: google.maps.UnitSystem.metric, // kilometers and meters.
           // transitOptions: transitOpt,
@@ -114,6 +110,7 @@ function useCalculateDistance({
         ) => callback(a, b, setData, handlerSaveData),
       );
   }, [origin, destination, service, travelMode]);
+
   if (typeof window === "undefined") return null;
   return data;
 }

@@ -132,6 +132,10 @@
   .distanceVal {
     margin: 10px 0;
   }
+
+  .distanceInfoBlock {
+    padding-top: 20px;
+  }
 }
 
 @media (max-width: 480px) {

@@ -4,6 +4,7 @@ export enum TravelMode {
   TRANSIT = "TRANSIT",
   TWO_WHEELER = "TWO_WHEELER",
   WALKING = "WALKING",
+  PLANE = "PLANE",
 }
 export enum UnitSystem {
   IMPERIAL = 0.0,

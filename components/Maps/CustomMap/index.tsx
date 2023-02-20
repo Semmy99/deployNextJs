@@ -3,6 +3,7 @@ import React from "react";
 import GoogleMapReact from "google-map-react";
 import styles from "styles/CustomMap.module.css";
 import { CoordsI } from "components/MainPage/PlacesAutocomplete/types";
+import { useRouter } from "next/router";
 const AnyReactComponent = ({ text }: any) => (
   <div style={{ color: "red" }}>{text}</div>
 );
@@ -22,12 +23,12 @@ export interface CustomMapI {
 
 function CustomMap({ setMaps, coords }: CustomMapI) {
   const [loaded, setLoaded] = React.useState(false);
+  const router = useRouter();
   React.useEffect(() => {
     setLoaded(true);
   }, []);
 
   function handleApiLoaded(map: google.maps.Map, maps: typeof google.maps) {
-    // const google = window.google; // ADDED
     setMaps(map, maps);
   }
 
@@ -37,7 +38,9 @@ function CustomMap({ setMaps, coords }: CustomMapI) {
       {loaded && (
         <GoogleMapReact
           bootstrapURLKeys={{
-            key: "AIzaSyC5NIQhbbLpyndiCw4BIeknK7rATZmX3Hk&libraries",
+            key: `AIzaSyC5NIQhbbLpyndiCw4BIeknK7rATZmX3Hk&&libraries=places&language=${
+              router.locale || "en"
+            }`,
           }}
           defaultCenter={defaultProps.center || coords}
           defaultZoom={defaultProps.zoom}

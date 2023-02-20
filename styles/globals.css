@@ -80,3 +80,7 @@ ul {
 .react-simple-image-viewer__close:hover {
   opacity: 1 !important;
 }
+
+.hide {
+  display: none;
+}

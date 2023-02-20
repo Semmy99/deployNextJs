@@ -1,7 +1,7 @@
-import Button from "components/Button";
 import Image from "next/image";
 import styles from "styles/InfoBlock.module.css";
 import ImageViewer from "react-simple-image-viewer";
+import SceletonText from "components/SceletonText";
 export type keyType = "from" | "to";
 
 type InfoSideBlockType = {
@@ -30,16 +30,16 @@ function InfoSideBlock({
     <>
       <div className={styles.infoBlock}>
         <div className={styles.geoContainer}>
-          <div>
+          <div className={styles.geoDescrContainer}>
             <p className={styles.geoHeader} title={cityName}>
               {cityName}
             </p>
-            {descr && (
-              <>
-                <p className={styles.geoDescr}>{descr}</p>
-                <Button title="Читать" className={styles.geoBtn} />
-              </>
+            {descr ? (
+              <p className={styles.geoDescr}>{descr}</p>
+            ) : (
+              <SceletonText />
             )}
+            {/* <Button title="Читать" className={styles.geoBtn} /> */}
           </div>
           <div className={styles.geoImages}>
             {imgs?.map((path, i) => {

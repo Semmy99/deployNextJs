@@ -1,0 +1,44 @@
+.container {
+  width: 1920px;
+  max-width: 100%;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+
+.mapContainer {
+  margin: 40px auto;
+  width: 1920px;
+  flex: 1;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+
+.sidebar {
+  background: rgba(255, 255, 255, 1);
+  box-shadow: -3px 4px 4px 5px rgb(0 0 0 / 25%);
+  padding: 5px;
+  position: absolute;
+  z-index: 1;
+  width: 30%;
+  min-width: 320px;
+  height: calc(100% - 100px);
+  overflow-y: auto;
+  left: 0;
+  top: 0;
+}
+
+
+
+@media (max-width: 780px) {
+  .sidebar {
+    position: relative;
+    width: 100%;
+  }
+}

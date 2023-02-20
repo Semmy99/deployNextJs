@@ -38,8 +38,13 @@ export function StoreProvider({
   initialState?: any;
 }) {
   const store = initializeStore(initialData);
+  console.log("StoreProvider");
 
   return (
     <StoreContext.Provider value={store}>{children}</StoreContext.Provider>
   );
 }
+
+export const useMainPage = () => {
+  return useStore().MainPageStore;
+};
